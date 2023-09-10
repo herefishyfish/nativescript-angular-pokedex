@@ -26,6 +26,7 @@ import { HlmTabsTriggerDirective } from "../ui/tabs/hlm-tabs-trigger.directive";
 import { HlmH1Directive } from "../ui/typography/hlm-h1.directive";
 import { HlmH2Directive } from "../ui/typography/hlm-h2.directive";
 import { HlmH3Directive } from "../ui/typography/hlm-h3.directive";
+import { HlmH4Directive } from "../ui/typography/hlm-h4.directive";
 import { HlmPDirective } from "../ui/typography/hlm-p.directive";
 import { PokemonService } from "../services/pokemon.service";
 import { CollectionViewModule } from "@nativescript-community/ui-collectionview/angular";
@@ -103,7 +104,7 @@ import { CollectionViewModule } from "@nativescript-community/ui-collectionview/
 
 
           <!-- Details -->
-          <StackLayout orientation="horizontal">
+          <StackLayout orientation="horizontal" class="mb-2">
             <StackLayout class="border-border border-r pr-3">
               <Label hlmP>Color</Label>
               <Label hlmH3 class="border-border border-b">{{ pokemon.species?.color | titlecase }}</Label>
@@ -118,36 +119,36 @@ import { CollectionViewModule } from "@nativescript-community/ui-collectionview/
             </StackLayout>
           </StackLayout>
 
-          <Label hlmP textWrap="true">{{ pokemon.species.english }}</Label>
-          <Label hlmP textWrap="true">{{ pokemon.species.japanese }}</Label>
-
+          <Label hlmP style="line-height: 0;" class="mb-2" textWrap="true">{{ pokemon.species.english }}</Label>
+          <Label hlmP style="line-height: 0;" class="mb-2" textWrap="true">{{ pokemon.species.japanese }}</Label>
         </StackLayout>
+
         <StackLayout hlmCard class="p-4" *pagerItem>
           <!-- Abilities -->
           <ng-container *rxFor="let ability of pokemon.abilities">
             <Label hlmH3>{{ ability?.name | titlecase }}</Label>
-            <Label>{{ ability?.english }}</Label>
-            <Label>{{ ability?.japanese }}</Label>
+            <Label hlmP style="line-height: 0;" class="mb-2" textWrap="true">{{ ability?.english }}</Label>
+            <Label hlmP style="line-height: 0;" class="mb-2" textWrap="true">{{ ability?.japanese }}</Label>
           </ng-container>
         </StackLayout>
         <GridLayout hlmCard class="p-4" *pagerItem>
           <!-- Moves -->
           <CollectionView
             [items]="pokemon.moves"
-            rowHeight="100"
+            rowHeight="60"
           >
             <ng-template let-move="item">
               <StackLayout>
                 <FlexboxLayout justifyContent="space-between">
-                  <Label hlmH3>{{ move.name | titlecase }}</Label>
+                  <Label class="text-primary" hlmH4>{{ move.name | titlecase }}</Label>
                   <Label hlmBadge [type]="move.type" alignSelf="center">{{
                     move?.type | titlecase 
                   }}</Label>
                 </FlexboxLayout>
                 <StackLayout orientation="horizontal">
-                  <Label>PP: {{ move.pp }}</Label>
-                  <Label>{{ move.power ? 'Power: ' + move.power : '' }}</Label>
-                  <Label>Accuracy: {{ move.accuracy }}%</Label>
+                  <Label hlmP class="mr-2 pr-2 border-border border-r">PP: {{ move.pp }}</Label>
+                  <Label hlmP *ngIf="move.power" class="mr-2 pr-2 border-border border-r">Power: {{ move.power }}</Label>
+                  <Label hlmP *ngIf="move.accuracy" class="mr-2 pr-2 border-border border-r">Accuracy: {{ move.accuracy }}%</Label>
                 </StackLayout>
               </StackLayout>
             </ng-template>
@@ -182,6 +183,7 @@ import { CollectionViewModule } from "@nativescript-community/ui-collectionview/
     HlmH1Directive,
     HlmH2Directive,
     HlmH3Directive,
+    HlmH4Directive,
     HlmPDirective,
     HlmBadgeDirective,
     HlmTabsListDirective,

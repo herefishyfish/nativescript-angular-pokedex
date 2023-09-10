@@ -48,7 +48,7 @@ export class PokemonService {
         moves: pokemon?.pokemon_v2_pokemonmoves?.map((move) => ({
           ...move.pokemon_v2_move,
           type: move.pokemon_v2_move.pokemon_v2_type.name,
-        })).filter((move, index, self) => self.findIndex((m) => m.name === move.name) === index),
+        })),
         types: pokemon?.pokemon_v2_pokemontypes?.map(
           (type) => type.pokemon_v2_type.name
         ),
@@ -67,7 +67,6 @@ export class PokemonService {
         },
         image: this.getPokemonImage(pokemon.id),
       })),
-      tap((result) => console.log(result.species)),
     );
   }
 }

@@ -90,7 +90,7 @@ query getPokemonDetails($id: Int!) {
         name
       }
     }
-    pokemon_v2_pokemonmoves {
+    pokemon_v2_pokemonmoves(distinct_on: move_id) {
       pokemon_v2_move {
         name
         accuracy

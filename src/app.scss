@@ -79,6 +79,10 @@ Button {
   @apply tracking-normal;
 }
 
+Label {
+  line-height: 0;
+}
+
 [hlmInput] {
   &.ns-ios {
     border-width: 1;
