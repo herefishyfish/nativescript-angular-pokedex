@@ -14,6 +14,26 @@ const badgeVariants = cva(
         destructive: 'bg-destructive border-transparent text-destructive-foreground',
         outline: 'text-foreground border-border',
       },
+      type: {
+        normal: "bg-stone-500 border-transparent text-primary-foreground",
+        fire: "bg-orange-500 border-transparent text-primary-foreground",
+        water: "bg-sky-500 border-transparent text-primary-foreground",
+        grass: "bg-green-600 border-transparent text-primary-foreground",
+        electric: "bg-yellow-400 border-transparent text-primary-foreground",
+        ice: "bg-blue-300 border-transparent text-primary-foreground",
+        fighting: "bg-red-500 border-transparent text-primary-foreground",
+        poison: "bg-fuchsia-600 border-transparent text-primary-foreground",
+        ground: "bg-orange-300 border-transparent text-primary-foreground",
+        flying: "bg-violet-300 border-transparent text-primary-foreground",
+        psychic: "bg-pink-600 border-transparent text-primary-foreground",
+        bug: "bg-lime-500 border-transparent text-primary-foreground",
+        rock: "bg-stone-600 border-transparent text-primary-foreground",
+        ghost: "bg-violet-400 border-transparent text-primary-foreground",
+        dark: "bg-stone-800 border-transparent text-primary-foreground",
+        dragon: "bg-violet-600 border-transparent text-primary-foreground",
+        steel: "bg-slate-400 border-transparent text-primary-foreground",
+        fairy: "bg-pink-300 border-transparent text-primary-foreground",
+      },
       static: { true: '', false: '' },
     },
     compoundVariants: [
@@ -56,6 +76,16 @@ export class HlmBadgeDirective {
     this._variant = value;
     this._class = this.generateClasses();
   }
+  private _type: badgeVariants['type'] = 'normal';
+  @Input()
+  get type(): badgeVariants['type'] {
+    return this._type;
+  }
+
+  set type(value: badgeVariants['type']) {
+    this._type = value;
+    this._class = this.generateClasses();
+  }
   private _static: badgeVariants['static'] = false;
   @Input()
   get static(): badgeVariants['static'] {
@@ -79,6 +109,6 @@ export class HlmBadgeDirective {
   private _class = this.generateClasses();
 
   private generateClasses() {
-    return hlm(badgeVariants({ variant: this._variant, static: this._static }), this._inputs);
+    return hlm(badgeVariants({ variant: this._variant, static: this._static, type: this._type }), this._inputs);
   }
 }

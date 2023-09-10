@@ -4,6 +4,8 @@ import { PokedexService } from './pokedex.service';
 import { TitleCasePipe } from '@angular/common';
 import { PokeList, Pokemon } from './pokemon.model';
 import { firstValueFrom } from 'rxjs';
+import { BrnSeparatorComponent } from '../ui/separator/brn-separator.component';
+import { HlmSeparatorDirective } from '../ui/separator/hlm-separator.directive';
 import { HlmH3Directive } from '../ui/typography/hlm-h3.directive';
 import {
   NativeScriptCommonModule,
@@ -23,8 +25,8 @@ import {
     <ActionBar tilte="NativeScript Pokedex"></ActionBar>
     <CollectionView (loadMoreItems)="loadMore()" [items]="pokemon" rowHeight="100">
       <ng-template let-pokemon="item">
-        <GridLayout columns="100 *" (tap)="navigateTo(pokemon.pokeIndex)">
-          <Label hlmH3 class="" column="1">{{ pokemon?.name | titlecase }}</Label>
+        <GridLayout rows="auto, auto" columns="100 *" class="border-border border-b" (tap)="navigateTo(pokemon.pokeIndex)">
+          <Label hlmH3 class="text-primary" column="1">{{ pokemon?.name | titlecase }}</Label>
           <ImageCacheIt [sharedTransitionTag]="'poke-image-' + pokemon.pokeIndex" height="100" [src]="pokemon?.image"></ImageCacheIt>
         </GridLayout>
       </ng-template>
@@ -36,6 +38,8 @@ import {
     CollectionViewModule,
     TitleCasePipe,
     HlmH3Directive,
+    BrnSeparatorComponent,
+    HlmSeparatorDirective,
     NativeScriptRouterModule,
     ImageCacheItModule,
   ],

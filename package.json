@@ -15,6 +15,7 @@
     "@angular/platform-browser-dynamic": "~16.2.0",
     "@angular/router": "~16.2.0",
     "@nativescript-community/ui-collectionview": "^5.1.9",
+    "@nativescript-community/ui-pager": "^14.1.6",
     "@nativescript/angular": "^16.0.0",
     "@nativescript/core": "~8.5.0",
     "@nativescript/theme": "~3.0.2",
@@ -30,6 +31,7 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "~16.2.0",
     "@angular/compiler-cli": "~16.2.0",
+    "@nativescript/android": "8.5.2",
     "@nativescript/preview-cli": "^1.0.5",
     "@nativescript/stackblitz": "0.0.8",
     "@nativescript/tailwind": "^2.0.1",
