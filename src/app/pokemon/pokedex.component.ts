@@ -1,8 +1,8 @@
 import { Component, NgZone, inject } from '@angular/core';
 import { CollectionViewModule } from '@nativescript-community/ui-collectionview/angular';
-import { PokedexService } from './pokedex.service';
+import { PokemonService } from '../services/pokemon.service';
+import { Pokemon } from '../services/gql/get-pokemon.gql';
 import { TitleCasePipe } from '@angular/common';
-import { PokeList, Pokemon } from './pokemon.model';
 import { firstValueFrom } from 'rxjs';
 import { BrnSeparatorComponent } from '../ui/separator/brn-separator.component';
 import { HlmSeparatorDirective } from '../ui/separator/hlm-separator.directive';
@@ -25,9 +25,9 @@ import {
     <ActionBar tilte="NativeScript Pokedex"></ActionBar>
     <CollectionView (loadMoreItems)="loadMore()" [items]="pokemon" rowHeight="100">
       <ng-template let-pokemon="item">
-        <GridLayout rows="auto, auto" columns="100 *" class="border-border border-b" (tap)="navigateTo(pokemon.pokeIndex)">
+        <GridLayout rows="auto, auto" columns="100 *" class="border-border border-b" (tap)="navigateTo(pokemon.id)">
           <Label hlmH3 class="text-primary" column="1">{{ pokemon?.name | titlecase }}</Label>
-          <ImageCacheIt [sharedTransitionTag]="'poke-image-' + pokemon.pokeIndex" height="100" [src]="pokemon?.image"></ImageCacheIt>
+          <ImageCacheIt [sharedTransitionTag]="'poke-image-' + pokemon.id" height="100" [src]="pokemon?.image"></ImageCacheIt>
         </GridLayout>
       </ng-template>
     </CollectionView>
@@ -45,18 +45,18 @@ import {
   ],
 })
 export class PokedexComponent {
-  private pokedexService = inject(PokedexService);
+  private pokemonService = inject(PokemonService);
   private router = inject(RouterExtensions);
   private zone = inject(NgZone);
-  pokemon: PokeList = [];
+  pokemon: Pokemon[] = [];
 
   async ngOnInit() {
-    this.pokemon = await firstValueFrom(this.pokedexService.getPokemon());
+    this.pokemon = await firstValueFrom(this.pokemonService.getPokemon(0));
   }
 
   async loadMore() {
     const newPokemon = await firstValueFrom(
-      this.pokedexService.getPokemon(this.pokemon.length)
+      this.pokemonService.getPokemon(this.pokemon.length)
     );
 
     this.pokemon = [...this.pokemon, ...newPokemon];

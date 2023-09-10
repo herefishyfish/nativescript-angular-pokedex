@@ -25,25 +25,29 @@ import { HlmTabsListDirective } from "../ui/tabs/hlm-tabs-list.directive";
 import { HlmTabsTriggerDirective } from "../ui/tabs/hlm-tabs-trigger.directive";
 import { HlmH1Directive } from "../ui/typography/hlm-h1.directive";
 import { HlmH2Directive } from "../ui/typography/hlm-h2.directive";
+import { HlmH3Directive } from "../ui/typography/hlm-h3.directive";
 import { HlmPDirective } from "../ui/typography/hlm-p.directive";
-import { PokedexService } from "./pokedex.service";
+import { PokemonService } from "../services/pokemon.service";
+import { CollectionViewModule } from "@nativescript-community/ui-collectionview/angular";
 
 @Component({
   template: `
     <GridLayout
       rows="auto auto auto *"
       columns="* auto"
-      *rxLet="pokemon$; let pokemon"
+      *rxLet="pokemon$; let pokemon;
+        suspense: suspense;
+        error: error"
     >
       <StackLayout colSpan="2" class="pb-1 pt-2 px-2" orientation="horizontal">
-        <Label hlmH1 class="text-primary mr-1">{{ title | titlecase }}</Label>
+        <Label hlmH1 class="text-primary mr-1">{{ name | titlecase }}</Label>
         <Label hlmH2>#{{ id }}</Label>
       </StackLayout>
 
       <StackLayout row="1" colSpan="2" class="pb-1 px-2" orientation="horizontal">
         <ng-container *rxFor="let type of pokemon.types">
-          <Label class="mr-1" hlmBadge [type]="type.type.name">{{
-            type.type.name | titlecase
+          <Label class="mr-1" hlmBadge [type]="type">{{
+            type | titlecase
           }}</Label>
         </ng-container>
       </StackLayout>
@@ -65,14 +69,14 @@ import { PokedexService } from "./pokedex.service";
         <Button
           hlmTabsTrigger
           *ngFor="
-            let name of ['Stats', 'Details', 'Abilities', 'Moves', 'Evolution'];
+            let tab of ['Stats', 'Details', 'Abilities', 'Moves', 'Evolution'];
             let i = index
           "
           width="120"
           color="{{ index | colorTransition : i : '#fff' : 'grey' }}"
           backgroundColor="{{ index | colorTransition : i : 'black' : '#fff' }}"
           (tap)="onSelectedIndexChanged(i)"
-          >{{ name }}</Button
+          >{{ tab }}</Button
         >
       </StackLayout>
 
@@ -80,39 +84,77 @@ import { PokedexService } from "./pokedex.service";
         <StackLayout hlmCard class="p-4" *pagerItem>
           <!-- Stats -->
           <StackLayout orientation="horizontal">
-            <StackLayout class="border-border border-r pr-2">
+            <StackLayout class="border-border border-r pr-3">
               <Label hlmP>Height</Label>
               <Label hlmH2>{{ pokemon.height | number : ".2" }} m </Label>
             </StackLayout>
-            <StackLayout class="ml-2">
+            <StackLayout class="ml-3">
               <Label hlmP>Weight</Label>
               <Label hlmH2>{{ pokemon.weight | number : ".2" }} kg </Label>
             </StackLayout>
           </StackLayout>
           <ng-container *rxFor="let stat of pokemon.stats">
             <Label
-              >{{ stat.stat.name | titlecase }} : {{ stat.base_stat }}</Label
+              >{{ stat?.name | titlecase }} : {{ stat.base_stat }}</Label
             >
           </ng-container>
         </StackLayout>
         <StackLayout hlmCard class="p-4" *pagerItem>
+
+
           <!-- Details -->
-          <Label hlmP>Base Experience</Label>
-          <Label hlmH2>{{ pokemon.base_experience }}</Label>
+          <StackLayout orientation="horizontal">
+            <StackLayout class="border-border border-r pr-3">
+              <Label hlmP>Color</Label>
+              <Label hlmH3 class="border-border border-b">{{ pokemon.species?.color | titlecase }}</Label>
+            </StackLayout>
+            <StackLayout class="ml-3 border-border border-r pr-3">
+              <Label hlmP>Shape</Label>
+              <Label hlmH3 class="border-border border-b">{{ pokemon.species?.shape | titlecase }}</Label>
+            </StackLayout>
+            <StackLayout class="ml-3">
+              <Label hlmP>Habitat</Label>
+              <Label hlmH3 class="border-border border-b">{{ pokemon.species?.habitat | titlecase }}</Label>
+            </StackLayout>
+          </StackLayout>
+
+          <Label hlmP textWrap="true">{{ pokemon.species.english }}</Label>
+          <Label hlmP textWrap="true">{{ pokemon.species.japanese }}</Label>
+
         </StackLayout>
         <StackLayout hlmCard class="p-4" *pagerItem>
-          <Label hlmP>Abilities</Label>
+          <!-- Abilities -->
           <ng-container *rxFor="let ability of pokemon.abilities">
-            <Label>{{ ability.ability.name | titlecase }}</Label>
+            <Label hlmH3>{{ ability?.name | titlecase }}</Label>
+            <Label>{{ ability?.english }}</Label>
+            <Label>{{ ability?.japanese }}</Label>
           </ng-container>
         </StackLayout>
+        <GridLayout hlmCard class="p-4" *pagerItem>
+          <!-- Moves -->
+          <CollectionView
+            [items]="pokemon.moves"
+            rowHeight="100"
+          >
+            <ng-template let-move="item">
+              <StackLayout>
+                <FlexboxLayout justifyContent="space-between">
+                  <Label hlmH3>{{ move.name | titlecase }}</Label>
+                  <Label hlmBadge [type]="move.type" alignSelf="center">{{
+                    move?.type | titlecase 
+                  }}</Label>
+                </FlexboxLayout>
+                <StackLayout orientation="horizontal">
+                  <Label>PP: {{ move.pp }}</Label>
+                  <Label>{{ move.power ? 'Power: ' + move.power : '' }}</Label>
+                  <Label>Accuracy: {{ move.accuracy }}%</Label>
+                </StackLayout>
+              </StackLayout>
+            </ng-template>
+          </CollectionView>
+        </GridLayout>
         <StackLayout hlmCard class="p-4" *pagerItem>
-          <Label hlmP>Base Experience</Label>
-          <Label hlmH2>{{ pokemon.base_experience }}</Label>
-        </StackLayout>
-        <StackLayout hlmCard class="p-4" *pagerItem>
-          <Label hlmP>Base Experience</Label>
-          <Label hlmH2>{{ pokemon.base_experience }}</Label>
+          <Label hlmP>Evolutions</Label>
         </StackLayout>
       </Pager>
     </GridLayout>
@@ -132,12 +174,14 @@ import { PokedexService } from "./pokedex.service";
   imports: [
     NativeScriptCommonModule,
     PagerModule,
+    CollectionViewModule,
     ImageCacheItModule,
     HlmCardDirective,
     HlmCardHeaderDirective,
     HlmCardTitleDirective,
     HlmH1Directive,
     HlmH2Directive,
+    HlmH3Directive,
     HlmPDirective,
     HlmBadgeDirective,
     HlmTabsListDirective,
@@ -153,7 +197,7 @@ import { PokedexService } from "./pokedex.service";
   schemas: [NO_ERRORS_SCHEMA],
 })
 export class PokemonDetailComponent implements OnInit, OnDestroy {
-  private pokedexService = inject(PokedexService);
+  private pokedexService = inject(PokemonService);
   private route = inject(ActivatedRoute);
   private page = inject(Page);
   private pager: Pager;
@@ -161,7 +205,7 @@ export class PokemonDetailComponent implements OnInit, OnDestroy {
   private _currentIndex = new BehaviorSubject(0);
   currentIndex$ = this._currentIndex.pipe(sampleTime(1000 / 60), startWith(0));
   imgUrl = "";
-  title = "";
+  name = "";
   id: number;
 
   ngOnInit() {
@@ -172,11 +216,12 @@ export class PokemonDetailComponent implements OnInit, OnDestroy {
   pokemon$ = this.route.params.pipe(
     switchMap((params) => {
       this.id = +params["id"];
-      this.imgUrl = this.pokedexService.getPokeImage(this.id);
-      return this.pokedexService.getPokeDetails(this.id);
+      this.imgUrl = this.pokedexService.getPokemonImage(this.id);
+      return this.pokedexService.getPokemonDetails(this.id);
     }),
     tap((pokemon) => {
-      this.title = pokemon.name;
+      this.name = pokemon.name;
+      return;
     })
   );
 

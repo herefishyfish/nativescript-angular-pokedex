@@ -2,7 +2,7 @@ import { Directive, HostBinding, Input } from '@angular/core';
 import { hlm } from '@spartan-ng/ui-core';
 import { ClassValue } from 'clsx';
 
-export const hlmP = 'leading-7 [&:not(:first-child)]:mt-6';
+export const hlmP = 'leading-7 [&:not(:first-child)]:mt-6 line-spacing-0';
 
 @Directive({
   selector: '[hlmP]',
