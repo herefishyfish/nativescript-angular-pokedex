@@ -162,7 +162,8 @@ import { CollectionViewModule } from "@nativescript-community/ui-collectionview/
 
     <ng-template #suspense>
       <GridLayout rows="*" columns="*">
-        <ActivityIndicator height="100" width="100" busy="true" />
+        <ImageCacheIt src="https://cdn-icons-png.flaticon.com/256/744/744104.png" height="60" width="60"></ImageCacheIt>
+        <ActivityIndicator class="text-primary" height="100" width="100" busy="true" />
       </GridLayout>
     </ng-template>
     <ng-template #error>
