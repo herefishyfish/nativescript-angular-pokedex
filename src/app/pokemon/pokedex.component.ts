@@ -70,16 +70,16 @@ export class PokedexComponent {
 
   navigateTo(index: number) {
     const config: SharedTransitionConfig = {
-      interactive: {
-        dismiss: {
-          finishThreshold: 0.3,
-          percentFormula: (eventData) => {
-            return (
-              eventData.deltaX / (eventData.ios.view.bounds.size.width / 2)
-            );
-          },
-        },
-      },
+      // interactive: {
+      //   dismiss: {
+      //     finishThreshold: 0.3,
+      //     percentFormula: (eventData) => {
+      //       return (
+      //         eventData.deltaX / (eventData.ios.view.bounds.size.width / 2)
+      //       );
+      //     },
+      //   },
+      // },
       pageStart: {
         x: -Screen.mainScreen.widthDIPs,
         y: 0,

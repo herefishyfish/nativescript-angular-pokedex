@@ -41,8 +41,8 @@ import { CollectionViewModule } from "@nativescript-community/ui-collectionview/
         error: error"
     >
       <StackLayout colSpan="2" class="pb-1 pt-2 px-2" orientation="horizontal">
-        <Label hlmH1 class="text-primary mr-1">{{ name | titlecase }}</Label>
-        <Label hlmH2>#{{ id }}</Label>
+        <Label hlmH1 class="text-primary mr-1">{{ pokemon?.name | titlecase }}</Label>
+        <Label hlmH2>#{{ pokemon?.id }}</Label>
       </StackLayout>
 
       <StackLayout row="1" colSpan="2" class="pb-1 px-2" orientation="horizontal">
@@ -140,7 +140,7 @@ import { CollectionViewModule } from "@nativescript-community/ui-collectionview/
             <ng-template let-move="item">
               <StackLayout>
                 <FlexboxLayout justifyContent="space-between">
-                  <Label class="text-primary" hlmH4>{{ move.name | titlecase }}</Label>
+                  <Label class="text-primary" hlmH4>{{ move?.name | titlecase }}</Label>
                   <Label hlmBadge [type]="move.type" alignSelf="center">{{
                     move?.type | titlecase 
                   }}</Label>
@@ -212,7 +212,7 @@ export class PokemonDetailComponent implements OnInit, OnDestroy {
   id: number;
 
   ngOnInit() {
-    this.page.enableSwipeBackNavigation = false;
+    // this.page.enableSwipeBackNavigation = false;
     this.page.actionBarHidden = true;
   }
 
@@ -222,10 +222,6 @@ export class PokemonDetailComponent implements OnInit, OnDestroy {
       this.imgUrl = this.pokedexService.getPokemonImage(this.id);
       return this.pokedexService.getPokemonDetails(this.id);
     }),
-    tap((pokemon) => {
-      this.name = pokemon.name;
-      return;
-    })
   );
 
   ngOnDestroy(): void {
