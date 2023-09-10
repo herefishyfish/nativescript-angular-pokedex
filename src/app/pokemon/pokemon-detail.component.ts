@@ -1,41 +1,42 @@
-import { NgFor, TitleCasePipe, JsonPipe } from "@angular/common";
+import { NgFor, TitleCasePipe, JsonPipe } from '@angular/common';
 import {
   Component,
   NO_ERRORS_SCHEMA,
   OnDestroy,
   OnInit,
   inject,
-} from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-import { Pager } from "@nativescript-community/ui-pager";
-import { PagerModule } from "@nativescript-community/ui-pager/angular";
-import { NativeScriptCommonModule } from "@nativescript/angular";
-import { LoadEventData, Page } from "@nativescript/core";
-import { RxFor } from "@rx-angular/template/for";
-import { RxLet } from "@rx-angular/template/let";
-import { RxPush } from "@rx-angular/template/push";
-import { ImageCacheItModule } from "@triniwiz/nativescript-image-cache-it/angular";
-import { BehaviorSubject, sampleTime, startWith, switchMap, tap } from "rxjs";
-import { HlmBadgeDirective } from "../ui/badge/hlm-badge.directive";
-import { HlmCardHeaderDirective } from "../ui/card/hlm-card-header.directive";
-import { HlmCardTitleDirective } from "../ui/card/hlm-card-title.directive";
-import { HlmCardDirective } from "../ui/card/hlm-card.directive";
-import { ColorTransitionPipe } from "../ui/tabs/color-transition.pipe";
-import { HlmTabsListDirective } from "../ui/tabs/hlm-tabs-list.directive";
-import { HlmTabsTriggerDirective } from "../ui/tabs/hlm-tabs-trigger.directive";
-import { HlmH1Directive } from "../ui/typography/hlm-h1.directive";
-import { HlmH2Directive } from "../ui/typography/hlm-h2.directive";
-import { HlmH3Directive } from "../ui/typography/hlm-h3.directive";
-import { HlmH4Directive } from "../ui/typography/hlm-h4.directive";
-import { HlmPDirective } from "../ui/typography/hlm-p.directive";
-import { PokemonService } from "../services/pokemon.service";
-import { CollectionViewModule } from "@nativescript-community/ui-collectionview/angular";
+} from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Pager } from '@nativescript-community/ui-pager';
+import { PagerModule } from '@nativescript-community/ui-pager/angular';
+import { NativeScriptCommonModule } from '@nativescript/angular';
+import { LoadEventData, Page } from '@nativescript/core';
+import { RxFor } from '@rx-angular/template/for';
+import { RxLet } from '@rx-angular/template/let';
+import { RxPush } from '@rx-angular/template/push';
+import { ImageCacheItModule } from '@triniwiz/nativescript-image-cache-it/angular';
+import { BehaviorSubject, sampleTime, startWith, switchMap, tap } from 'rxjs';
+import { HlmBadgeDirective } from '../ui/badge/hlm-badge.directive';
+import { HlmCardHeaderDirective } from '../ui/card/hlm-card-header.directive';
+import { HlmCardTitleDirective } from '../ui/card/hlm-card-title.directive';
+import { HlmCardDirective } from '../ui/card/hlm-card.directive';
+import { ColorTransitionPipe } from '../ui/tabs/color-transition.pipe';
+import { HlmTabsListDirective } from '../ui/tabs/hlm-tabs-list.directive';
+import { HlmTabsTriggerDirective } from '../ui/tabs/hlm-tabs-trigger.directive';
+import { HlmH1Directive } from '../ui/typography/hlm-h1.directive';
+import { HlmH2Directive } from '../ui/typography/hlm-h2.directive';
+import { HlmH3Directive } from '../ui/typography/hlm-h3.directive';
+import { HlmH4Directive } from '../ui/typography/hlm-h4.directive';
+import { HlmPDirective } from '../ui/typography/hlm-p.directive';
+import { PokemonService } from '../services/pokemon.service';
+import { CollectionViewModule } from '@nativescript-community/ui-collectionview/angular';
 
 @Component({
   template: `
     <GridLayout
       rows="auto auto auto *"
       columns="* auto"
+      class="pb-2"
       *rxLet="pokemon$; let pokemon;
         suspense: suspense;
         error: error"
@@ -101,7 +102,6 @@ import { CollectionViewModule } from "@nativescript-community/ui-collectionview/
           </ng-container>
         </StackLayout>
         <StackLayout hlmCard class="p-4" *pagerItem>
-
 
           <!-- Details -->
           <StackLayout orientation="horizontal" class="mb-2">
@@ -207,8 +207,8 @@ export class PokemonDetailComponent implements OnInit, OnDestroy {
   private _scrollListener;
   private _currentIndex = new BehaviorSubject(0);
   currentIndex$ = this._currentIndex.pipe(sampleTime(1000 / 60), startWith(0));
-  imgUrl = "";
-  name = "";
+  imgUrl = '';
+  name = '';
   id: number;
 
   ngOnInit() {
@@ -218,10 +218,10 @@ export class PokemonDetailComponent implements OnInit, OnDestroy {
 
   pokemon$ = this.route.params.pipe(
     switchMap((params) => {
-      this.id = +params["id"];
+      this.id = +params['id'];
       this.imgUrl = this.pokedexService.getPokemonImage(this.id);
       return this.pokedexService.getPokemonDetails(this.id);
-    }),
+    })
   );
 
   ngOnDestroy(): void {
@@ -231,8 +231,8 @@ export class PokemonDetailComponent implements OnInit, OnDestroy {
   onPagerLoaded(event: LoadEventData) {
     this.pager = event.object as Pager;
 
-    this._scrollListener = this.pager.on("scroll", (args) => {
-      this._currentIndex.next(args["currentPosition"]);
+    this._scrollListener = this.pager.on('scroll', (args) => {
+      this._currentIndex.next(args['currentPosition']);
     });
   }
 
