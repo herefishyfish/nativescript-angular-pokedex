@@ -61,13 +61,7 @@ export class PokedexComponent {
 
     this.pokemon = [...this.pokemon, ...newPokemon];
   }
-
-  navigateTo2(index: number) {
-    this.zone.run(() => {
-      this.router.navigate([`pokemon/${index}`]);
-    });
-  }
-
+  
   navigateTo(index: number) {
     const config: SharedTransitionConfig = {
       // interactive: {
