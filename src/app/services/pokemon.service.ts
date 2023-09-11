@@ -65,6 +65,8 @@ export class PokemonService {
           english: pokemon?.pokemon_v2_pokemonspecy.english[0].flavor_text.replaceAll("\n", " ").replaceAll("\f", " "),
           japanese: pokemon?.pokemon_v2_pokemonspecy.japanese[0].flavor_text.replaceAll("\n", " ").replaceAll("\f", " ")
         },
+        weight: pokemon?.weight / 10,
+        height: pokemon?.height / 10,
         image: this.getPokemonImage(pokemon.id),
       })),
     );

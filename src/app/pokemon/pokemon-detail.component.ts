@@ -99,11 +99,11 @@ import { CollectionViewModule } from "@nativescript-community/ui-collectionview/
           <StackLayout horizontalAlignment="left" orientation="horizontal">
             <StackLayout class="border-border border-r pr-3">
               <Label hlmP>Height</Label>
-              <Label hlmH2>{{ pokemon.height | number : ".2" }} m </Label>
+              <Label hlmH2>{{ pokemon.height | number : "1.2" }} m </Label>
             </StackLayout>
             <StackLayout class="ml-3">
               <Label hlmP>Weight</Label>
-              <Label hlmH2>{{ pokemon.weight | number : ".2" }} kg </Label>
+              <Label hlmH2>{{ pokemon.weight | number : "1.2" }} kg </Label>
             </StackLayout>
           </StackLayout>
           <ng-container *rxFor="let stat of pokemon.stats">
