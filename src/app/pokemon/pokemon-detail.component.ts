@@ -213,9 +213,15 @@ import { CollectionViewModule } from "@nativescript-community/ui-collectionview/
       </GridLayout>
     </ng-template>
     <ng-template #error>
-      <StackLayout>
-        <Label>Could not get pokemon! 🫤</Label>
-      </StackLayout>
+      <GridLayout rows="* auto *" columns="*">
+        <Label hlmH3 row="1" class="text-center">Could not get pokemon! 🫤</Label>
+        <ImageCacheIt
+          src="https://static.thenounproject.com/png/561604-200.png"
+          height="280"
+          width="280"
+        ></ImageCacheIt>
+        <Label class="text-center mt-8 pt-8 text-7xl text-primary" hlmH1>???</Label>
+      </GridLayout>
     </ng-template>
   `,
   standalone: true,
