@@ -25,6 +25,7 @@
     "@spartan-ng/ui-core": "^0.0.1-alpha.303",
     "@triniwiz/nativescript-image-cache-it": "^7.4.0",
     "apollo-angular": "^5.0.1",
+    "apollo3-cache-persist": "^0.14.1",
     "class-variance-authority": "^0.6.0",
     "clsx": "^1.2.1",
     "graphql": "^16.8.0",
