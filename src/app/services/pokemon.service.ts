@@ -47,10 +47,10 @@ export class PokemonService {
         })),
         moves: pokemon?.pokemon_v2_pokemonmoves?.map((move) => ({
           ...move.pokemon_v2_move,
-          type: move.pokemon_v2_move.pokemon_v2_type.name,
+          type: move.pokemon_v2_move.pokemon_v2_type?.name,
         })),
         types: pokemon?.pokemon_v2_pokemontypes?.map(
-          (type) => type.pokemon_v2_type.name
+          (type) => type.pokemon_v2_type?.name
         ),
         abilities: pokemon?.pokemon_v2_pokemonabilities?.map((ability) => ({
           ...ability.pokemon_v2_ability,
@@ -59,9 +59,9 @@ export class PokemonService {
         })),
         species: {
           ...pokemon?.pokemon_v2_pokemonspecy,
-          color: pokemon?.pokemon_v2_pokemonspecy.pokemon_v2_pokemoncolor.name,
-          shape: pokemon?.pokemon_v2_pokemonspecy.pokemon_v2_pokemonshape.name,
-          habitat: pokemon?.pokemon_v2_pokemonspecy.pokemon_v2_pokemonhabitat.name,
+          color: pokemon?.pokemon_v2_pokemonspecy.pokemon_v2_pokemoncolor?.name,
+          shape: pokemon?.pokemon_v2_pokemonspecy.pokemon_v2_pokemonshape?.name,
+          habitat: pokemon?.pokemon_v2_pokemonspecy.pokemon_v2_pokemonhabitat?.name ?? 'Unknown',
           english: pokemon?.pokemon_v2_pokemonspecy.english[0].flavor_text.replaceAll("\n", " ").replaceAll("\f", " "),
           japanese: pokemon?.pokemon_v2_pokemonspecy.japanese[0].flavor_text.replaceAll("\n", " ").replaceAll("\f", " ")
         },
