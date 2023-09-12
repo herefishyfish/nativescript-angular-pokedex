@@ -14,12 +14,12 @@ export class PokemonService {
     return `${this.imageUrl}${index}.png`;
   }
 
-  getPokemon(offset: number) {
+  getPokemon() {
     return this.apollo.watchQuery({
       query: GET_POKEMON,
       variables: {
-        limit: 100,
-        offset,
+        limit: 1008,
+        offset: 0,
       },
     }).valueChanges.pipe(
       map((result) =>

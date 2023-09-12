@@ -50,7 +50,7 @@
 }
 
 Page, Frame {
-  @apply bg-primary;
+  @apply dark:bg-primary bg-background text-primary;
 }
 
 [hlmCard] {
