@@ -40,7 +40,7 @@ import { CollectionViewModule } from "@nativescript-community/ui-collectionview/
       class="pb-2"
       *rxLet="pokemon$; let pokemon; suspense: suspense; error: error"
     >
-      <StackLayout colSpan="2" class="pb-1 pt-2 px-2" orientation="horizontal">
+      <StackLayout colSpan="2" class="pb-1 pt-2 px-4" orientation="horizontal">
         <Label hlmH1 class="text-primary mr-1">{{
           pokemon?.name | titlecase
         }}</Label>
@@ -50,7 +50,7 @@ import { CollectionViewModule } from "@nativescript-community/ui-collectionview/
       <StackLayout
         row="1"
         colSpan="2"
-        class="pb-1 px-2"
+        class="pb-1 px-4"
         orientation="horizontal"
       >
         <ng-container *rxFor="let type of pokemon.types">
@@ -90,14 +90,13 @@ import { CollectionViewModule } from "@nativescript-community/ui-collectionview/
 
       <Pager
         peaking="8"
-        spacing="4"
         row="3"
         colSpan="2"
         (loaded)="onPagerLoaded($event)"
       >
-        <StackLayout hlmCard class="p-4" *pagerItem>
+        <StackLayout hlmCard class="p-4 mx-2 my-1" *pagerItem>
           <!-- Stats -->
-          <StackLayout horizontalAlignment="left" orientation="horizontal">
+          <StackLayout horizontalAlignment="left" orientation="horizontal" class="mb-1">
             <StackLayout class="border-border border-r pr-3">
               <Label hlmP>Height</Label>
               <Label hlmH2>{{ pokemon.height | number : "1.2" }} m </Label>
@@ -112,7 +111,7 @@ import { CollectionViewModule } from "@nativescript-community/ui-collectionview/
             <brn-progress [max]="255" [value]="stat.base_stat" />
           </ng-container>
         </StackLayout>
-        <StackLayout hlmCard class="p-4" *pagerItem>
+        <StackLayout hlmCard class="p-4 mx-2 my-1" *pagerItem>
           <!-- Details -->
           <StackLayout
             orientation="horizontal"
@@ -147,7 +146,7 @@ import { CollectionViewModule } from "@nativescript-community/ui-collectionview/
           }}</Label>
         </StackLayout>
 
-        <StackLayout hlmCard class="p-4" *pagerItem>
+        <StackLayout hlmCard class="p-4 mx-2 my-1" *pagerItem>
           <!-- Abilities -->
           <ng-container *rxFor="let ability of pokemon.abilities">
             <Label hlmH3>{{ ability?.name | titlecase }}</Label>
@@ -159,7 +158,7 @@ import { CollectionViewModule } from "@nativescript-community/ui-collectionview/
             }}</Label>
           </ng-container>
         </StackLayout>
-        <GridLayout hlmCard class="py-2" *pagerItem>
+        <GridLayout hlmCard class="py-2 mx-2 my-1" *pagerItem>
           <!-- Moves -->
           <CollectionView [items]="pokemon.moves" rowHeight="60">
             <ng-template let-move="item">
@@ -193,7 +192,7 @@ import { CollectionViewModule } from "@nativescript-community/ui-collectionview/
             </ng-template>
           </CollectionView>
         </GridLayout>
-        <StackLayout hlmCard class="p-4" *pagerItem>
+        <StackLayout hlmCard class="p-4 mx-2 my-1" *pagerItem>
           <Label hlmP>Evolutions</Label>
         </StackLayout>
       </Pager>

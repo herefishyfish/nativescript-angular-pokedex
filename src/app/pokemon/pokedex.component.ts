@@ -22,7 +22,7 @@ import {
 
 @Component({
   template: `
-    <ActionBar class="bg-card text-primary" title="NativeScript Pokedex">
+    <ActionBar class="bg-background text-primary" title="NativeScript Pokedex">
     </ActionBar>
     <CollectionView (loadMoreItems)="loadMore()" [items]="pokemon" rowHeight="100">
       <ng-template let-pokemon="item">

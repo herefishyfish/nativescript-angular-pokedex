@@ -42,6 +42,7 @@ export class BrnProgressComponent extends FlexboxLayout {
     const view = event.object as ContentView;
     view.horizontalAlignment = "left";
     view.width = 0;
+    view.originX = 0;
     
     setTimeout(() => {
       view.animate({
