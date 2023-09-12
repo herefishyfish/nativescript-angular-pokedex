@@ -54,16 +54,16 @@ export class PokemonService {
         ),
         abilities: pokemon?.pokemon_v2_pokemonabilities?.map((ability) => ({
           ...ability.pokemon_v2_ability,
-          english: ability.pokemon_v2_ability.english[0].flavor_text,
-          japanese: ability.pokemon_v2_ability.japanese[0].flavor_text,
+          english: ability.pokemon_v2_ability.english?.[0]?.flavor_text,
+          japanese: ability.pokemon_v2_ability.japanese?.[0]?.flavor_text,
         })),
         species: {
           ...pokemon?.pokemon_v2_pokemonspecy,
-          color: pokemon?.pokemon_v2_pokemonspecy.pokemon_v2_pokemoncolor?.name,
-          shape: pokemon?.pokemon_v2_pokemonspecy.pokemon_v2_pokemonshape?.name,
+          color: pokemon?.pokemon_v2_pokemonspecy.pokemon_v2_pokemoncolor?.name ?? 'Unknown',
+          shape: pokemon?.pokemon_v2_pokemonspecy.pokemon_v2_pokemonshape?.name ?? 'Unknown',
           habitat: pokemon?.pokemon_v2_pokemonspecy.pokemon_v2_pokemonhabitat?.name ?? 'Unknown',
-          english: pokemon?.pokemon_v2_pokemonspecy.english[0].flavor_text.replaceAll("\n", " ").replaceAll("\f", " "),
-          japanese: pokemon?.pokemon_v2_pokemonspecy.japanese[0].flavor_text.replaceAll("\n", " ").replaceAll("\f", " ")
+          english: pokemon?.pokemon_v2_pokemonspecy.english?.[0]?.flavor_text.replaceAll("\n", " ").replaceAll("\f", " "),
+          japanese: pokemon?.pokemon_v2_pokemonspecy.japanese?.[0]?.flavor_text.replaceAll("\n", " ").replaceAll("\f", " ")
         },
         weight: pokemon?.weight / 10,
         height: pokemon?.height / 10,
