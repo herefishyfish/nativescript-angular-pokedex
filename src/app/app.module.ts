@@ -1,5 +1,6 @@
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import {
+  NativeScriptAnimationsModule,
   NativeScriptHttpClientModule,
   NativeScriptModule,
 } from '@nativescript/angular';
@@ -17,6 +18,7 @@ import { PokemonService } from './services/pokemon.service';
   imports: [
     NativeScriptModule,
     NativeScriptHttpClientModule,
+    NativeScriptAnimationsModule,
     GraphQLModule,
     AppRoutingModule,
     RxLet,

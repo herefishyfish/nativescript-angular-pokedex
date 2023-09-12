@@ -49,6 +49,10 @@
   --ring: 240 3.7% 15.9%;
 }
 
+Page, Frame {
+  @apply bg-primary;
+}
+
 [hlmCard] {
   &.ns-android {
     margin: 1;
@@ -93,4 +97,16 @@ Label {
       box-shadow: 0 0 0 2 hsl(var(--input));
     }
   }
+}
+
+.brn-progress {
+  @apply bg-secondary mt-1 mb-2;
+  width: 100%;
+  height: 20;
+  border-radius: 20;
+}
+.hlm-progress-indicator {
+  @apply bg-primary;
+  height: 100%;
+  border-radius: 20 0 0 20;
 }

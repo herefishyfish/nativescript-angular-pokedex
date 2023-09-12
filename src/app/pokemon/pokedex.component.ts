@@ -22,7 +22,8 @@ import {
 
 @Component({
   template: `
-    <ActionBar tilte="NativeScript Pokedex"></ActionBar>
+    <ActionBar class="bg-card text-primary" title="NativeScript Pokedex">
+    </ActionBar>
     <CollectionView (loadMoreItems)="loadMore()" [items]="pokemon" rowHeight="100">
       <ng-template let-pokemon="item">
         <GridLayout rows="auto, auto" columns="100 *" class="border-border border-b" (tap)="navigateTo(pokemon.id)">
@@ -64,16 +65,6 @@ export class PokedexComponent {
   
   navigateTo(index: number) {
     const config: SharedTransitionConfig = {
-      // interactive: {
-      //   dismiss: {
-      //     finishThreshold: 0.3,
-      //     percentFormula: (eventData) => {
-      //       return (
-      //         eventData.deltaX / (eventData.ios.view.bounds.size.width / 2)
-      //       );
-      //     },
-      //   },
-      // },
       pageStart: {
         x: -Screen.mainScreen.widthDIPs,
         y: 0,

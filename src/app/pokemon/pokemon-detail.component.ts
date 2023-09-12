@@ -28,6 +28,7 @@ import { HlmH2Directive } from "../ui/typography/hlm-h2.directive";
 import { HlmH3Directive } from "../ui/typography/hlm-h3.directive";
 import { HlmH4Directive } from "../ui/typography/hlm-h4.directive";
 import { HlmPDirective } from "../ui/typography/hlm-p.directive";
+import { BrnProgressComponent } from "../ui/progress/brn-progress.component";
 import { PokemonService } from "../services/pokemon.service";
 import { CollectionViewModule } from "@nativescript-community/ui-collectionview/angular";
 
@@ -43,7 +44,7 @@ import { CollectionViewModule } from "@nativescript-community/ui-collectionview/
         <Label hlmH1 class="text-primary mr-1">{{
           pokemon?.name | titlecase
         }}</Label>
-        <Label hlmH2>#{{ pokemon?.id }}</Label>
+        <Label hlmH2 class="text-muted-foreground">#{{ pokemon?.id }}</Label>
       </StackLayout>
 
       <StackLayout
@@ -108,6 +109,7 @@ import { CollectionViewModule } from "@nativescript-community/ui-collectionview/
           </StackLayout>
           <ng-container *rxFor="let stat of pokemon.stats">
             <Label>{{ stat?.name | titlecase }} : {{ stat.base_stat }}</Label>
+            <brn-progress [max]="255" [value]="stat.base_stat" />
           </ng-container>
         </StackLayout>
         <StackLayout hlmCard class="p-4" *pagerItem>
@@ -170,7 +172,7 @@ import { CollectionViewModule } from "@nativescript-community/ui-collectionview/
                     move?.type | titlecase
                   }}</Label>
                 </FlexboxLayout>
-                <StackLayout orientation="horizontal">
+                <StackLayout class="text-muted-foreground" orientation="horizontal">
                   <Label hlmP class="mr-2 pr-2 border-border border-r"
                     >PP: {{ move.pp }}</Label
                   >
@@ -241,6 +243,7 @@ import { CollectionViewModule } from "@nativescript-community/ui-collectionview/
     HlmBadgeDirective,
     HlmTabsListDirective,
     HlmTabsTriggerDirective,
+    BrnProgressComponent,
     JsonPipe,
     TitleCasePipe,
     ColorTransitionPipe,
