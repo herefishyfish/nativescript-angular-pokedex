@@ -31,7 +31,7 @@ registerElement("pokemon-evolutions", () => PokemonEvolutionsComponent);
           <Label
             hlmP
             style="line-height: 0;"
-            class="m-2 mt-0 border-border border-b text-muted-foreground"
+            class="m-2 border-border border-b text-muted-foreground"
             >#{{ pokemon?.id }}</Label
           >
           <Label hlmH4>{{ pokemon?.name | titlecase }}</Label>
