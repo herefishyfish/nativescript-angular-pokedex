@@ -78,7 +78,7 @@ import { PokemonEvolutionsComponent } from "./components/evolutions.component";
         <Button
           hlmTabsTrigger
           *ngFor="
-            let tab of ['Stats', 'Details', 'Abilities', 'Moves', 'Evolution'];
+            let tab of ['Stats', 'Details', 'Abilities', 'Moves', 'Evolutions'];
             let i = index
           "
           width="120"

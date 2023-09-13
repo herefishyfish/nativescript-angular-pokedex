@@ -14,7 +14,7 @@ registerElement('pokemon-card', () => PokemonPageCardComponent);
   template: `
     <ContentView row="1" rowSpan="2" colSpan="2" hlmCard class="p-2 px-4">
     </ContentView>
-    <ImageCacheIt class="image p-1 mx-6" [sharedTransitionTag]="'poke-image-' + pokemon.id" [src]="pokemon?.image"></ImageCacheIt>
+    <ImageCacheIt class="image p-1 mx-4" [sharedTransitionTag]="'poke-image-' + pokemon.id" [src]="pokemon?.image"></ImageCacheIt>
     <StackLayout class="p-2 px-4" style="z-index: 4;" row="1" colSpan="2" rowSpan="2">
       <Label class="text-primary">#{{ pokemon?.id }}</Label>
       <Label hlmH3 class="text-primary">{{ pokemon?.name | titlecase }}</Label>
