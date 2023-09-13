@@ -31,7 +31,4 @@ registerElement("pokemon-abilities", () => PokemonAbilitiesComponent);
 })
 export class PokemonAbilitiesComponent extends StackLayout {
   @Input() pokemon: PokemonDetails;
-
-  ngAfterViewInit() {
-  }
 }

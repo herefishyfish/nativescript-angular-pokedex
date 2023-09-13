@@ -21,9 +21,22 @@ import {
   SharedTransitionConfig,
   isIOS,
 } from "@nativescript/core";
+import { RxActionFactory } from "@rx-angular/state/actions";
 import { RxLet } from "@rx-angular/template/let";
 import { ImageCacheItModule } from "@triniwiz/nativescript-image-cache-it/angular";
-import { BehaviorSubject, Observable, combineLatest, map } from "rxjs";
+import {
+  BehaviorSubject,
+  Observable,
+  Subject,
+  catchError,
+  combineLatest,
+  map,
+  of,
+  startWith,
+  switchMap,
+  tap,
+  throwError,
+} from "rxjs";
 import { Pokemon } from "../../services/gql/get-pokemon.gql";
 import { PokemonService } from "../../services/pokemon.service";
 import { HlmButtonDirective } from "../../ui/button/hlm-button.directive";
@@ -32,6 +45,10 @@ import { HlmSeparatorDirective } from "../../ui/separator/hlm-separator.directiv
 import { HlmH1Directive } from "../../ui/typography/hlm-h1.directive";
 import { HlmH3Directive } from "../../ui/typography/hlm-h3.directive";
 import { PokemonPageCardComponent } from "./components/pokemon-card.component";
+
+interface Actions {
+  retry: void;
+}
 
 @Component({
   template: `
@@ -64,7 +81,16 @@ import { PokemonPageCardComponent } from "./components/pokemon-card.component";
           hint="Search Pokemon"
         ></TextField>
       </StackLayout>
-      <ng-container *rxLet="pokemon$; let pokemon; suspense: suspense">
+      <ng-container
+        *rxLet="
+          pokemon$;
+          let pokemon;
+          suspense: suspense;
+          suspenseTrigger: suspenseTrigger$;
+          error: error;
+          errorTrigger: errorTrigger$
+        "
+      >
         <CollectionView
           row="1"
           rowHeight="120"
@@ -94,6 +120,13 @@ import { PokemonPageCardComponent } from "./components/pokemon-card.component";
         />
       </GridLayout>
     </ng-template>
+
+    <ng-template #error>
+      <StackLayout class="p-4" row="1">
+        <Label>Something went wrong</Label>
+        <Button hlmBtn (tap)="action.retry()">Retry</Button>
+      </StackLayout>
+    </ng-template>
   `,
   standalone: true,
   imports: [
@@ -110,6 +143,7 @@ import { PokemonPageCardComponent } from "./components/pokemon-card.component";
     ImageCacheItModule,
     RxLet,
   ],
+  providers: [RxActionFactory],
   schemas: [NO_ERRORS_SCHEMA],
 })
 export class PokedexPageComponent {
@@ -117,9 +151,14 @@ export class PokedexPageComponent {
   private router = inject(RouterExtensions);
   private zone = inject(NgZone);
   private collectionView: CollectionView;
+  private factory = inject(RxActionFactory<Actions>);
+  action = this.factory.create();
+
   displayMode = signal("fill");
-  pokemon$: Observable<Pokemon[]>;
+  pokemon$: Observable<Pokemon[] | null>;
   search$ = new BehaviorSubject("");
+  errorTrigger$ = new Subject<void>();
+  suspenseTrigger$ = new Subject<void>();
 
   get searchValue(): string {
     return this.search$.getValue();
@@ -129,13 +168,33 @@ export class PokedexPageComponent {
   }
 
   async ngOnInit() {
-    this.pokemon$ = combineLatest([this.search$, this.pokemonService.getPokemon()]).pipe(
+    this.pokemon$ = this.action.retry$.pipe(
+      tap(() => {
+        this.suspenseTrigger$.next();
+      }),
+      startWith(null),
+      switchMap(() =>
+        combineLatest([
+          this.search$,
+          this.pokemonService.getPokemon().pipe(
+            catchError((error) => {
+              console.log(error);
+              return of(null);
+            })
+          ),
+        ])
+      ),
       map(([searchValue, pokemon]) => {
-        return pokemon.filter(
+        return pokemon?.filter(
           (p) =>
             p.name.includes(searchValue.toLowerCase()) ||
             p.id.toString().includes(searchValue)
         );
+      }),
+      tap((r) => {
+        if (!r) {
+          this.errorTrigger$.next();
+        }
       })
     );
   }

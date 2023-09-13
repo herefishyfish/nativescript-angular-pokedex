@@ -21,6 +21,7 @@
     "@nativescript/core": "~8.5.0",
     "@nativescript/theme": "~3.0.2",
     "@rx-angular/cdk": "^16.0.0",
+    "@rx-angular/state": "^16.0.0",
     "@rx-angular/template": "^16.1.0",
     "@spartan-ng/ui-core": "^0.0.1-alpha.303",
     "@triniwiz/nativescript-image-cache-it": "^7.4.0",

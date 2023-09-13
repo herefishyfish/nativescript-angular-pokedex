@@ -41,6 +41,4 @@ registerElement("pokemon-stats", () => PokemonStatsComponent);
 })
 export class PokemonStatsComponent extends StackLayout {
   @Input() pokemon: PokemonDetails;
-
-  ngAfterViewInit() {}
 }

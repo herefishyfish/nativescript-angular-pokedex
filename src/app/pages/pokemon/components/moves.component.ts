@@ -67,7 +67,4 @@ registerElement("pokemon-moves", () => PokemonMovesComponent);
 })
 export class PokemonMovesComponent extends GridLayout {
   @Input() pokemon: PokemonDetails;
-
-  ngAfterViewInit() {
-  }
 }
