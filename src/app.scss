@@ -49,7 +49,11 @@
   --ring: 240 3.7% 15.9%;
 }
 
-Page, Frame {
+Frame {
+  @apply dark:bg-primary bg-background text-primary;
+}
+
+Page {
   @apply dark:bg-primary bg-background text-primary;
 }
 
@@ -102,6 +106,13 @@ Label {
       box-shadow: 0 0 0 2 hsl(var(--input));
     }
   }
+}
+
+TextField {
+  placeholder-color: hsl(var(--muted-foreground));
+}
+.ns-dark TextField {
+  placeholder-color: hsl(var(--muted-foreground));
 }
 
 .brn-progress {

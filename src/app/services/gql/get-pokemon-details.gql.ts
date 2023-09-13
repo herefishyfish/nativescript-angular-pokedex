@@ -33,8 +33,19 @@ interface Pokemonv2pokemonspecy {
   pokemon_v2_pokemoncolor: Pokemonv2type;
   pokemon_v2_pokemonshape: Pokemonv2type;
   pokemon_v2_pokemonhabitat: Pokemonv2type;
+  pokemon_v2_evolutionchain: Pokemonv2evolutionchain;
   english: English2[];
   japanese: English2[];
+}
+
+interface Pokemonv2evolutionchain {
+  pokemon_v2_pokemonspecies: Pokemonv2pokemonspecies[];
+}
+
+interface Pokemonv2pokemonspecies {
+  id: number;
+  name: string;
+  order: number;
 }
 
 interface English2 {
@@ -131,6 +142,13 @@ query getPokemonDetails($id: Int!) {
       }
       pokemon_v2_pokemonhabitat {
         name
+      }
+      pokemon_v2_evolutionchain {
+        pokemon_v2_pokemonspecies {
+          id
+          name
+          order
+        }
       }
       english:pokemon_v2_pokemonspeciesflavortexts(where: {language_id: {_eq: 9}}, limit: 1) {
         flavor_text

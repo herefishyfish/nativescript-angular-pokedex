@@ -1,3 +1,4 @@
+import { CoreTypes, TouchAnimationOptions } from '@nativescript/core';
 import { Directive, HostBinding, Input } from '@angular/core';
 import { cva, VariantProps } from 'class-variance-authority';
 import { hlm } from '@spartan-ng/ui-core';
@@ -34,7 +35,7 @@ type ButtonVariants = VariantProps<typeof buttonVariants>;
   selector: '[hlmBtn]',
   standalone: true,
 })
-export class HlmButtonDirective {
+export class HostHlmButtonDirective {
   private _variant: ButtonVariants['variant'] = 'default';
   @Input()
   get variant(): ButtonVariants['variant'] {
@@ -71,4 +72,32 @@ export class HlmButtonDirective {
   private generateClasses() {
     return hlm(buttonVariants({ variant: this._variant, size: this._size }), this._inputs);
   }
+}
+
+@Directive({
+  selector: '[hlmBtn]',
+  standalone: true,
+  hostDirectives: [
+    {
+      directive: HostHlmButtonDirective,
+      inputs: ['variant', 'size', 'class'],
+    },
+  ],
+})
+export class HlmButtonDirective {
+  @HostBinding('touchAnimation')
+  private _touchAnimation: TouchAnimationOptions = {
+    down: {
+      scale: { x: 0.99, y: 0.99 },
+      opacity: 0.9,
+      duration: 125,
+      curve: CoreTypes.AnimationCurve.easeInOut,
+    },
+    up: {
+      scale: { x: 1, y: 1 },
+      opacity: 1,
+      duration: 125,
+      curve: CoreTypes.AnimationCurve.easeInOut,
+    },
+  };
 }

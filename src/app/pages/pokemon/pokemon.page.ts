@@ -31,6 +31,7 @@ import { PokemonAbilitiesComponent } from "./components/abilities.component";
 import { PokemonMovesComponent } from "./components/moves.component";
 import { PokemonStatsComponent } from "./components/stats.component";
 import { PokemonDetailsComponent } from "./components/details.component";
+import { PokemonEvolutionsComponent } from "./components/evolutions.component";
 
 @Component({
   template: `
@@ -64,6 +65,7 @@ import { PokemonDetailsComponent } from "./components/details.component";
         [sharedTransitionTag]="'poke-image-' + id"
         [src]="pokemon.image"
         row="2"
+        class="m-2"
       ></ImageCacheIt>
 
       <StackLayout
@@ -114,8 +116,10 @@ import { PokemonDetailsComponent } from "./components/details.component";
           *pagerItem
         />
 
-        <StackLayout hlmCard class="p-4 mx-2 my-1" *pagerItem>
-          <Label hlmP>Evolutions</Label>
+        <StackLayout hlmCard class="p-4 mx-2 my-1"  *pagerItem>
+          <ScrollView>
+            <pokemon-evolutions [pokemon]="pokemon" />
+          </ScrollView>
         </StackLayout>
       </Pager>
     </GridLayout>
@@ -160,6 +164,7 @@ import { PokemonDetailsComponent } from "./components/details.component";
     PokemonMovesComponent,
     PokemonDetailsComponent,
     PokemonStatsComponent,
+    PokemonEvolutionsComponent,
     HlmCardDirective,
     HlmH1Directive,
     HlmH2Directive,

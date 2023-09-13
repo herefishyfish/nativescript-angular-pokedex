@@ -53,9 +53,9 @@ interface Actions {
 @Component({
   template: `
     <GridLayout rows="auto *">
-      <StackLayout row="0" class="p-2 text-primary">
+      <StackLayout row="0" class="p-2 text-primary dark:text-white">
         <FlexboxLayout class="mb-1" justifyContent="space-between">
-          <Label hlmH1 class="text-lg text-primary">NativeScript Pokedex</Label>
+          <Label hlmH1 class="text-lg">NativeScript Pokedex</Label>
           <StackLayout orientation="horizontal">
             <Button
               text="&#xf0c9;"
@@ -77,7 +77,7 @@ interface Actions {
         </FlexboxLayout>
         <TextField
           (textChange)="searchValue = $event.value"
-          class="border-border border rounded-md p-2"
+          class="border-border border rounded-md p-2 text-primary dark:text-white"
           hint="Search Pokemon"
         ></TextField>
       </StackLayout>

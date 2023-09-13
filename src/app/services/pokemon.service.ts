@@ -84,6 +84,13 @@ export class PokemonService {
               pokemon?.pokemon_v2_pokemonspecy.japanese?.[0]?.flavor_text
                 .replaceAll("\n", " ")
                 .replaceAll("\f", " "),
+            evolutions: pokemon?.pokemon_v2_pokemonspecy.pokemon_v2_evolutionchain?.pokemon_v2_pokemonspecies?.map(
+              (evolution) => ({
+                ...evolution,
+                image: this.getPokemonImage(evolution.id),
+                sprite: this.getPokemonSprite(evolution.id),
+              })
+            ).sort((a, b) => a.order - b.order)
           },
           weight: pokemon?.weight / 10,
           height: pokemon?.height / 10,
