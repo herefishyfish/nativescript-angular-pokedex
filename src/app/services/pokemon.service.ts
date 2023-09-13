@@ -34,10 +34,7 @@ export class PokemonService {
             image: this.getPokemonImage(pokemon.id),
             sprite: this.getPokemonSprite(pokemon.id),
           }))
-        ),
-        shareReplay({
-          refCount: true,
-        })
+        )
       );
   }
 

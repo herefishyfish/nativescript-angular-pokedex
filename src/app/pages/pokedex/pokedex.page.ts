@@ -24,7 +24,7 @@ import {
 } from "@nativescript/core";
 import { RxLet } from "@rx-angular/template/let";
 import { ImageCacheItModule } from "@triniwiz/nativescript-image-cache-it/angular";
-import { BehaviorSubject, Observable, map, of, switchMap } from "rxjs";
+import { BehaviorSubject, Observable, combineLatest, map } from "rxjs";
 import { Pokemon } from "../../services/gql/get-pokemon.gql";
 import { PokemonService } from "../../services/pokemon.service";
 import { HlmButtonDirective } from "../../ui/button/hlm-button.directive";
@@ -119,16 +119,12 @@ export class PokedexPageComponent {
   }
 
   async ngOnInit() {
-    this.pokemon$ = this.search$.pipe(
-      switchMap((searchValue) => {
-        return this.pokemonService.getPokemon().pipe(
-          map((pokemon) => {
-            return pokemon.filter(
-              (p) =>
-                p.name.includes(searchValue.toLowerCase()) ||
-                p.id.toString().includes(searchValue)
-            );
-          })
+    this.pokemon$ = combineLatest([this.search$, this.pokemonService.getPokemon()]).pipe(
+      map(([searchValue, pokemon]) => {
+        return pokemon.filter(
+          (p) =>
+            p.name.includes(searchValue.toLowerCase()) ||
+            p.id.toString().includes(searchValue)
         );
       })
     );
