@@ -1,6 +1,5 @@
 import { TitleCasePipe } from "@angular/common";
 import {
-  ChangeDetectorRef,
   Component,
   NO_ERRORS_SCHEMA,
   NgZone,
@@ -81,7 +80,19 @@ import { PokemonPageCardComponent } from "./components/pokemon-card.component";
     </GridLayout>
 
     <ng-template #suspense>
-      <Label row="1">Loading...</Label>
+      <GridLayout row="1" rows="*" columns="*">
+        <ImageCacheIt
+          src="https://cdn-icons-png.flaticon.com/256/744/744104.png"
+          height="60"
+          width="60"
+        ></ImageCacheIt>
+        <ActivityIndicator
+          class="text-primary"
+          height="100"
+          width="100"
+          busy="true"
+        />
+      </GridLayout>
     </ng-template>
   `,
   standalone: true,
@@ -105,7 +116,6 @@ export class PokedexPageComponent {
   private pokemonService = inject(PokemonService);
   private router = inject(RouterExtensions);
   private zone = inject(NgZone);
-  private cdRef = inject(ChangeDetectorRef);
   private collectionView: CollectionView;
   displayMode = signal("fill");
   pokemon$: Observable<Pokemon[]>;
