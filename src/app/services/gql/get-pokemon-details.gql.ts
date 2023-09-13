@@ -1,6 +1,6 @@
 import { gql } from "apollo-angular";
 
-interface PokemonDetailsResponse {
+export interface PokemonDetailsResponse {
   pokemon_v2_pokemon: Pokemonv2pokemon[];
 }
 

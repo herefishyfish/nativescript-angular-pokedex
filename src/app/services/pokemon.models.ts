@@ -1,3 +1,5 @@
+import {PokemonDetailsResponse} from './gql/get-pokemon-details.gql';
+
 export interface Pokemon {
   image: string;
   sprite: string;
@@ -5,6 +7,11 @@ export interface Pokemon {
   name: string;
 }
 
-export interface PokemonDetails {
-  
+export interface PokemonDetails extends PokemonDetailsResponse {
+  abilities: any;
+  moves: any;
+  species: any;
+  stats: any;
+  height: number;
+  weight: number;
 }

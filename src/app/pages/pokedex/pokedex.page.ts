@@ -121,41 +121,7 @@ export class PokedexPageComponent {
   async ngOnInit() {
     this.pokemon$ = this.search$.pipe(
       switchMap((searchValue) => {
-        // return this.pokemonService.getPokemon()
-        return of([
-          {
-            id: 1,
-            name: "bulbasaur",
-            image:
-              "https://raw.githubusercontent.com/HybridShivam/Pokemon/master/assets/thumbnails/001.png",
-            sprite:
-              "https://img.pokemondb.net/sprites/sun-moon/normal/pikachu-f.png",
-          },
-          {
-            id: 2,
-            name: "ivysaur",
-            image:
-              "https://raw.githubusercontent.com/HybridShivam/Pokemon/master/assets/thumbnails/002.png",
-          },
-          {
-            id: 3,
-            name: "venusaur",
-            image:
-              "https://raw.githubusercontent.com/HybridShivam/Pokemon/master/assets/thumbnails/003.png",
-          },
-          {
-            id: 4,
-            name: "charmander",
-            image:
-              "https://raw.githubusercontent.com/HybridShivam/Pokemon/master/assets/thumbnails/004.png",
-          },
-          {
-            id: 5,
-            name: "charmeleon",
-            image:
-              "https://raw.githubusercontent.com/HybridShivam/Pokemon/master/assets/thumbnails/005.png",
-          },
-        ]).pipe(
+        return this.pokemonService.getPokemon().pipe(
           map((pokemon) => {
             return pokemon.filter(
               (p) =>

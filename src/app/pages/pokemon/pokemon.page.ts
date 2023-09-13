@@ -13,12 +13,9 @@ import { NativeScriptCommonModule } from "@nativescript/angular";
 import { LoadEventData, Page } from "@nativescript/core";
 import { RxFor } from "@rx-angular/template/for";
 import { RxLet } from "@rx-angular/template/let";
-import { RxPush } from "@rx-angular/template/push";
 import { ImageCacheItModule } from "@triniwiz/nativescript-image-cache-it/angular";
-import { BehaviorSubject, sampleTime, startWith, switchMap, tap } from "rxjs";
+import { BehaviorSubject, sampleTime, startWith, switchMap } from "rxjs";
 import { HlmBadgeDirective } from "../../ui/badge/hlm-badge.directive";
-import { HlmCardHeaderDirective } from "../../ui/card/hlm-card-header.directive";
-import { HlmCardTitleDirective } from "../../ui/card/hlm-card-title.directive";
 import { HlmCardDirective } from "../../ui/card/hlm-card.directive";
 import { ColorTransitionPipe } from "../../ui/tabs/color-transition.pipe";
 import { HlmTabsListDirective } from "../../ui/tabs/hlm-tabs-list.directive";
@@ -30,13 +27,16 @@ import { HlmH4Directive } from "../../ui/typography/hlm-h4.directive";
 import { HlmPDirective } from "../../ui/typography/hlm-p.directive";
 import { BrnProgressComponent } from "../../ui/progress/brn-progress.component";
 import { PokemonService } from "../../services/pokemon.service";
-import { CollectionViewModule } from "@nativescript-community/ui-collectionview/angular";
+import { PokemonAbilitiesComponent } from "./components/abilities.component";
+import { PokemonMovesComponent } from "./components/moves.component";
+import { PokemonStatsComponent } from "./components/stats.component";
+import { PokemonDetailsComponent } from "./components/details.component";
 
 @Component({
   template: `
     <GridLayout
       rows="auto auto auto *"
-      columns="* auto"
+      columns="70* 30*"
       class="pb-2"
       *rxLet="pokemon$; let pokemon; suspense: suspense; error: error"
     >
@@ -53,7 +53,7 @@ import { CollectionViewModule } from "@nativescript-community/ui-collectionview/
         class="pb-1 px-4"
         orientation="horizontal"
       >
-        <ng-container *rxFor="let type of pokemon.types">
+        <ng-container *ngFor="let type of pokemon.types">
           <Label class="mr-1" hlmBadge [type]="type">{{
             type | titlecase
           }}</Label>
@@ -62,7 +62,7 @@ import { CollectionViewModule } from "@nativescript-community/ui-collectionview/
 
       <ImageCacheIt
         [sharedTransitionTag]="'poke-image-' + id"
-        [src]="imgUrl"
+        [src]="pokemon.image"
         row="2"
       ></ImageCacheIt>
 
@@ -88,110 +88,32 @@ import { CollectionViewModule } from "@nativescript-community/ui-collectionview/
         >
       </StackLayout>
 
-      <Pager
-        peaking="8"
-        row="3"
-        colSpan="2"
-        (loaded)="onPagerLoaded($event)"
-      >
-        <StackLayout hlmCard class="p-4 mx-2 my-1" *pagerItem>
-          <!-- Stats -->
-          <StackLayout horizontalAlignment="left" orientation="horizontal" class="mb-1">
-            <StackLayout class="border-border border-r pr-3">
-              <Label hlmP>Height</Label>
-              <Label hlmH2>{{ pokemon.height | number : "1.2" }} m </Label>
-            </StackLayout>
-            <StackLayout class="ml-3">
-              <Label hlmP>Weight</Label>
-              <Label hlmH2>{{ pokemon.weight | number : "1.2" }} kg </Label>
-            </StackLayout>
-          </StackLayout>
-          <ng-container *rxFor="let stat of pokemon.stats">
-            <Label>{{ stat?.name | titlecase }} : {{ stat.base_stat }}</Label>
-            <brn-progress [max]="255" [value]="stat.base_stat" />
-          </ng-container>
-        </StackLayout>
-        <StackLayout hlmCard class="p-4 mx-2 my-1" *pagerItem>
-          <!-- Details -->
-          <StackLayout
-            orientation="horizontal"
-            horizontalAlignment="left"
-            class="mb-2"
-          >
-            <StackLayout class="border-border border-r pr-3">
-              <Label hlmP>Color</Label>
-              <Label hlmH3 class="border-border border-b">{{
-                pokemon.species?.color | titlecase
-              }}</Label>
-            </StackLayout>
-            <StackLayout class="ml-3 border-border border-r pr-3">
-              <Label hlmP>Shape</Label>
-              <Label hlmH3 class="border-border border-b">{{
-                pokemon.species?.shape | titlecase
-              }}</Label>
-            </StackLayout>
-            <StackLayout class="ml-3">
-              <Label hlmP>Habitat</Label>
-              <Label hlmH3 class="border-border border-b">{{
-                pokemon.species?.habitat | titlecase
-              }}</Label>
-            </StackLayout>
-          </StackLayout>
+      <Pager peaking="8" row="3" colSpan="2" (loaded)="onPagerLoaded($event)">
+        <pokemon-stats
+          hlmCard
+          class="p-4 mx-2 my-1"
+          [pokemon]="pokemon"
+          *pagerItem
+        />
+        <pokemon-details
+          hlmCard
+          class="p-4 mx-2 my-1"
+          [pokemon]="pokemon"
+          *pagerItem
+        />
+        <pokemon-abilities
+          hlmCard
+          class="p-4 mx-2 my-1"
+          [pokemon]="pokemon"
+          *pagerItem
+        />
+        <pokemon-moves
+          hlmCard
+          class="py-2 mx-2 my-1"
+          [pokemon]="pokemon"
+          *pagerItem
+        />
 
-          <Label hlmP style="line-height: 0;" class="mb-2" textWrap="true">{{
-            pokemon.species.english
-          }}</Label>
-          <Label hlmP style="line-height: 0;" class="mb-2" textWrap="true">{{
-            pokemon.species.japanese
-          }}</Label>
-        </StackLayout>
-
-        <StackLayout hlmCard class="p-4 mx-2 my-1" *pagerItem>
-          <!-- Abilities -->
-          <ng-container *rxFor="let ability of pokemon.abilities">
-            <Label hlmH3>{{ ability?.name | titlecase }}</Label>
-            <Label hlmP style="line-height: 0;" class="mb-2" textWrap="true">{{
-              ability?.english
-            }}</Label>
-            <Label hlmP style="line-height: 0;" class="mb-2" textWrap="true">{{
-              ability?.japanese
-            }}</Label>
-          </ng-container>
-        </StackLayout>
-        <GridLayout hlmCard class="py-2 mx-2 my-1" *pagerItem>
-          <!-- Moves -->
-          <CollectionView [items]="pokemon.moves" rowHeight="60">
-            <ng-template let-move="item">
-              <StackLayout class="px-4">
-                <FlexboxLayout justifyContent="space-between">
-                  <Label class="text-primary" hlmH4>{{
-                    move?.name | titlecase
-                  }}</Label>
-                  <Label hlmBadge [type]="move.type" alignSelf="center">{{
-                    move?.type | titlecase
-                  }}</Label>
-                </FlexboxLayout>
-                <StackLayout class="text-muted-foreground" orientation="horizontal">
-                  <Label hlmP class="mr-2 pr-2 border-border border-r"
-                    >PP: {{ move.pp }}</Label
-                  >
-                  <Label
-                    hlmP
-                    *ngIf="move.power"
-                    class="mr-2 pr-2 border-border border-r"
-                    >Power: {{ move.power }}</Label
-                  >
-                  <Label
-                    hlmP
-                    *ngIf="move.accuracy"
-                    class="mr-2 pr-2 border-border border-r"
-                    >Accuracy: {{ move.accuracy }}%</Label
-                  >
-                </StackLayout>
-              </StackLayout>
-            </ng-template>
-          </CollectionView>
-        </GridLayout>
         <StackLayout hlmCard class="p-4 mx-2 my-1" *pagerItem>
           <Label hlmP>Evolutions</Label>
         </StackLayout>
@@ -215,13 +137,17 @@ import { CollectionViewModule } from "@nativescript-community/ui-collectionview/
     </ng-template>
     <ng-template #error>
       <GridLayout rows="* auto *" columns="*">
-        <Label hlmH3 row="1" class="text-center">Could not get pokemon! 🫤</Label>
+        <Label hlmH3 row="1" class="text-center"
+          >Could not get pokemon! 🫤</Label
+        >
         <ImageCacheIt
           src="https://static.thenounproject.com/png/561604-200.png"
           height="280"
           width="280"
         ></ImageCacheIt>
-        <Label class="text-center mt-8 pt-8 text-7xl text-primary" hlmH1>???</Label>
+        <Label class="text-center mt-8 pt-8 text-7xl text-primary" hlmH1
+          >???</Label
+        >
       </GridLayout>
     </ng-template>
   `,
@@ -229,11 +155,12 @@ import { CollectionViewModule } from "@nativescript-community/ui-collectionview/
   imports: [
     NativeScriptCommonModule,
     PagerModule,
-    CollectionViewModule,
     ImageCacheItModule,
+    PokemonAbilitiesComponent,
+    PokemonMovesComponent,
+    PokemonDetailsComponent,
+    PokemonStatsComponent,
     HlmCardDirective,
-    HlmCardHeaderDirective,
-    HlmCardTitleDirective,
     HlmH1Directive,
     HlmH2Directive,
     HlmH3Directive,
@@ -246,8 +173,6 @@ import { CollectionViewModule } from "@nativescript-community/ui-collectionview/
     JsonPipe,
     TitleCasePipe,
     ColorTransitionPipe,
-    RxPush,
-    RxFor,
     RxLet,
     NgFor,
   ],
@@ -261,8 +186,6 @@ export class PokemonDetailComponent implements OnInit, OnDestroy {
   private _scrollListener;
   private _currentIndex = new BehaviorSubject(0);
   currentIndex$ = this._currentIndex.pipe(sampleTime(1000 / 60), startWith(0));
-  imgUrl = "";
-  name = "";
   id: number;
 
   ngOnInit() {
@@ -273,7 +196,6 @@ export class PokemonDetailComponent implements OnInit, OnDestroy {
   pokemon$ = this.route.params.pipe(
     switchMap((params) => {
       this.id = +params["id"];
-      this.imgUrl = this.pokedexService.getPokemonSprite(this.id);
       return this.pokedexService.getPokemonDetails(this.id);
     })
   );
