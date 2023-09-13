@@ -9,9 +9,8 @@ import {
 import { ActivatedRoute } from "@angular/router";
 import { Pager } from "@nativescript-community/ui-pager";
 import { PagerModule } from "@nativescript-community/ui-pager/angular";
-import { NativeScriptCommonModule } from "@nativescript/angular";
+import { NativeScriptCommonModule, RouterExtensions } from "@nativescript/angular";
 import { LoadEventData, Page } from "@nativescript/core";
-import { RxFor } from "@rx-angular/template/for";
 import { RxLet } from "@rx-angular/template/let";
 import { ImageCacheItModule } from "@triniwiz/nativescript-image-cache-it/angular";
 import { BehaviorSubject, sampleTime, startWith, switchMap } from "rxjs";
@@ -116,9 +115,9 @@ import { PokemonEvolutionsComponent } from "./components/evolutions.component";
           *pagerItem
         />
 
-        <StackLayout hlmCard class="p-4 mx-2 my-1"  *pagerItem>
-          <ScrollView>
-            <pokemon-evolutions [pokemon]="pokemon" />
+        <StackLayout hlmCard class="p-4 mx-2 my-1" *pagerItem>
+          <ScrollView height="100%">
+            <pokemon-evolutions [pokemon]="pokemon" (tapped)="onEvolutionChange($event)" />
           </ScrollView>
         </StackLayout>
       </Pager>
@@ -186,6 +185,7 @@ import { PokemonEvolutionsComponent } from "./components/evolutions.component";
 export class PokemonDetailComponent implements OnInit, OnDestroy {
   private pokedexService = inject(PokemonService);
   private route = inject(ActivatedRoute);
+  private router = inject(RouterExtensions);
   private page = inject(Page);
   private pager: Pager;
   private _scrollListener;
@@ -219,5 +219,12 @@ export class PokemonDetailComponent implements OnInit, OnDestroy {
 
   onSelectedIndexChanged(index: number) {
     this.pager.selectedIndex = index;
+  }
+
+  onEvolutionChange(id: number) {
+    this.router.navigate(["/pokemon", id]);
+    if(this.id != id) {
+      this.pager.selectedIndex = 0;
+    }
   }
 }

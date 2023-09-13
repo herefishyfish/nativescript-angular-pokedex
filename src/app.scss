@@ -81,6 +81,13 @@ Page {
   }
 }
 
+Button {
+  &.ns-android {
+    android-elevation: -4;
+  }
+  text-transform: none;
+}
+
 [hlmBtn] {
   &.ns-android {
     android-elevation: -4;
