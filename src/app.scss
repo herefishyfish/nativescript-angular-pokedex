@@ -53,6 +53,11 @@ Page, Frame {
   @apply dark:bg-primary bg-background text-primary;
 }
 
+.fa {
+  font-family: 'FontAwesome', 'fontawesome-webfont';
+  font-weight: 400;
+}
+
 [hlmCard] {
   &.ns-android {
     margin: 1;

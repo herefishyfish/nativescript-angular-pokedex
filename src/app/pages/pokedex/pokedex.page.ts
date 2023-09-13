@@ -43,8 +43,8 @@ import { PokemonPageCardComponent } from "./components/pokemon-card.component";
         <FlexboxLayout class="mb-1" justifyContent="space-between">
           <Label hlmH1 class="text-lg text-primary">NativeScript Pokedex</Label>
           <StackLayout orientation="horizontal">
-            <Button hlmBtn variant="outline" style="android-elevation: -4;" (tap)="setDisplayMode('fill')" class="m-0 mr-1 p-0 w-10 h-10">f</Button>
-            <Button hlmBtn variant="outline" style="android-elevation: -4;" (tap)="setDisplayMode('grid')" class="m-0 p-0 w-10 h-10">g</Button>
+            <Button text="&#xf0c9;" hlmBtn variant="outline" style="android-elevation: -4;" (tap)="setDisplayMode('fill')" class="fa m-0 mr-1 p-0 w-10 h-10"></Button>
+            <Button text="&#xf009;" hlmBtn variant="outline" style="android-elevation: -4;" (tap)="setDisplayMode('grid')" class="fa m-0 p-0 w-10 h-10"></Button>
           </StackLayout>
         </FlexboxLayout>
         <TextField
