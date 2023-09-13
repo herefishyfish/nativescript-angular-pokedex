@@ -204,12 +204,12 @@ export class PokedexPageComponent {
   }
 
   setDisplayMode(value) {
-    this.displayMode.set(value);
-    if (isIOS && this.collectionView) {
-      setTimeout(() => {
+    this.zone.runOutsideAngular(() => {
+      this.displayMode.set(value);
+      if (isIOS && this.collectionView) {
         this.collectionView.requestLayout();
-      });
-    }
+      }
+    });
   }
 
   navigateTo(index: number) {
