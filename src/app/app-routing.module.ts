@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes } from '@angular/router';
 import { NativeScriptRouterModule } from '@nativescript/angular';
-import { PokemonDetailComponent } from './pokemon/pokemon-detail.component';
-import { PokedexComponent } from './pokemon/pokedex.component';
+import { PokemonDetailComponent } from './pages/pokemon/pokemon.page';
+import { PokedexPageComponent } from './pages/pokedex/pokedex.page';
 
 const routes: Routes = [
   { path: '', redirectTo: '/pokemon', pathMatch: 'full' },
-  { path: 'pokemon', component: PokedexComponent },
+  { path: 'pokemon', component: PokedexPageComponent },
   { path: 'pokemon/:id', component: PokemonDetailComponent },
 ];
 

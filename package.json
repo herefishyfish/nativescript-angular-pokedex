@@ -36,7 +36,7 @@
     "@angular-devkit/build-angular": "~16.2.0",
     "@angular/compiler-cli": "~16.2.0",
     "@nativescript/android": "8.5.2",
-    "@nativescript/preview-cli": "^1.0.5",
+    "@nativescript/preview-cli": "1.0.5",
     "@nativescript/stackblitz": "0.0.8",
     "@nativescript/tailwind": "^2.0.1",
     "@nativescript/types-minimal": "~8.5.0",

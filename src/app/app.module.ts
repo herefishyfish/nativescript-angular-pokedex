@@ -9,8 +9,6 @@ import { RxLet } from '@rx-angular/template/let';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { PokemonDetailComponent } from './pokemon/pokemon-detail.component';
-import { PokedexComponent } from './pokemon/pokedex.component';
 import { PokemonService } from './services/pokemon.service';
 
 @NgModule({
@@ -22,8 +20,6 @@ import { PokemonService } from './services/pokemon.service';
     GraphQLModule,
     AppRoutingModule,
     RxLet,
-    PokemonDetailComponent,
-    PokedexComponent,
   ],
   declarations: [AppComponent],
   providers: [PokemonService],
