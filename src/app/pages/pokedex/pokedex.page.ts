@@ -1,39 +1,37 @@
-import {
-  Component,
-  NgZone,
-  inject,
-  NO_ERRORS_SCHEMA,
-  signal,
-} from "@angular/core";
-import { CollectionViewModule } from "@nativescript-community/ui-collectionview/angular";
-import { PokemonService } from "../../services/pokemon.service";
-import { Pokemon } from "../../services/gql/get-pokemon.gql";
 import { TitleCasePipe } from "@angular/common";
 import {
-  BehaviorSubject,
-  Observable,
-  map,
-  of,
-  switchMap,
-} from "rxjs";
-import { BrnSeparatorComponent } from "../../ui/separator/brn-separator.component";
-import { HlmSeparatorDirective } from "../../ui/separator/hlm-separator.directive";
-import { HlmH3Directive } from "../../ui/typography/hlm-h3.directive";
+  ChangeDetectorRef,
+  Component,
+  NO_ERRORS_SCHEMA,
+  NgZone,
+  inject,
+  signal,
+} from "@angular/core";
+import { CollectionView } from "@nativescript-community/ui-collectionview";
+import { CollectionViewModule } from "@nativescript-community/ui-collectionview/angular";
 import {
   NativeScriptCommonModule,
   NativeScriptRouterModule,
   RouterExtensions,
 } from "@nativescript/angular";
-import { ImageCacheItModule } from "@triniwiz/nativescript-image-cache-it/angular";
 import {
+  LoadEventData,
   PageTransition,
+  Screen,
   SharedTransition,
   SharedTransitionConfig,
-  Screen,
+  isIOS,
 } from "@nativescript/core";
 import { RxLet } from "@rx-angular/template/let";
-import { HlmH1Directive } from "../../ui/typography/hlm-h1.directive";
+import { ImageCacheItModule } from "@triniwiz/nativescript-image-cache-it/angular";
+import { BehaviorSubject, Observable, map, of, switchMap } from "rxjs";
+import { Pokemon } from "../../services/gql/get-pokemon.gql";
+import { PokemonService } from "../../services/pokemon.service";
 import { HlmButtonDirective } from "../../ui/button/hlm-button.directive";
+import { BrnSeparatorComponent } from "../../ui/separator/brn-separator.component";
+import { HlmSeparatorDirective } from "../../ui/separator/hlm-separator.directive";
+import { HlmH1Directive } from "../../ui/typography/hlm-h1.directive";
+import { HlmH3Directive } from "../../ui/typography/hlm-h3.directive";
 import { PokemonPageCardComponent } from "./components/pokemon-card.component";
 
 @Component({
@@ -43,21 +41,36 @@ import { PokemonPageCardComponent } from "./components/pokemon-card.component";
         <FlexboxLayout class="mb-1" justifyContent="space-between">
           <Label hlmH1 class="text-lg text-primary">NativeScript Pokedex</Label>
           <StackLayout orientation="horizontal">
-            <Button text="&#xf0c9;" hlmBtn variant="outline" style="android-elevation: -4;" (tap)="setDisplayMode('fill')" class="fa m-0 mr-1 p-0 w-10 h-10"></Button>
-            <Button text="&#xf009;" hlmBtn variant="outline" style="android-elevation: -4;" (tap)="setDisplayMode('grid')" class="fa m-0 p-0 w-10 h-10"></Button>
+            <Button
+              text="&#xf0c9;"
+              hlmBtn
+              variant="outline"
+              style="android-elevation: -4;"
+              (tap)="setDisplayMode('fill')"
+              class="fa m-0 mr-1 p-0 w-10 h-10"
+            ></Button>
+            <Button
+              text="&#xf009;"
+              hlmBtn
+              variant="outline"
+              style="android-elevation: -4;"
+              (tap)="setDisplayMode('grid')"
+              class="fa m-0 p-0 w-10 h-10"
+            ></Button>
           </StackLayout>
         </FlexboxLayout>
         <TextField
           (textChange)="searchValue = $event.value"
-          class="border-border border rounded-md px-2"
+          class="border-border border rounded-md p-2"
           hint="Search Pokemon"
         ></TextField>
       </StackLayout>
       <ng-container *rxLet="pokemon$; let pokemon; suspense: suspense">
         <CollectionView
           row="1"
-          [items]="pokemon"
           rowHeight="120"
+          [items]="pokemon"
+          (loaded)="onCollectionViewLoad($event)"
           [colWidth]="displayMode() === 'fill' ? '100%' : '50%'"
         >
           <ng-template let-pokemon="item">
@@ -92,6 +105,8 @@ export class PokedexPageComponent {
   private pokemonService = inject(PokemonService);
   private router = inject(RouterExtensions);
   private zone = inject(NgZone);
+  private cdRef = inject(ChangeDetectorRef);
+  private collectionView: CollectionView;
   displayMode = signal("fill");
   pokemon$: Observable<Pokemon[]>;
   search$ = new BehaviorSubject("");
@@ -153,8 +168,17 @@ export class PokedexPageComponent {
     );
   }
 
+  onCollectionViewLoad(args: LoadEventData) {
+    this.collectionView = args.object as CollectionView;
+  }
+
   setDisplayMode(value) {
-    this.displayMode.set(value)
+    this.displayMode.set(value);
+    if (isIOS && this.collectionView) {
+      setTimeout(() => {
+        this.collectionView.requestLayout();
+      });
+    }
   }
 
   navigateTo(index: number) {

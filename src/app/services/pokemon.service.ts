@@ -92,8 +92,7 @@ export class PokemonService {
           height: pokemon?.height / 10,
           image: this.getPokemonImage(pokemon.id),
           sprite: this.getPokemonSprite(pokemon.id),
-        })),
-        tap((pokemon) => console.log(pokemon))
+        }))
       );
   }
 }
