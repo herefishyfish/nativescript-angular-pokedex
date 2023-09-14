@@ -86,7 +86,7 @@ interface Actions {
           pokemon$;
           let pokemon;
           suspense: suspense;
-          suspenseTrigger: suspenseTrigger$;
+          suspenseTrigger: action.retry$;
           error: error;
           errorTrigger: errorTrigger$
         "
@@ -155,10 +155,8 @@ export class PokedexPageComponent {
   action = this.factory.create();
 
   displayMode = signal("fill");
-  pokemon$: Observable<Pokemon[] | null>;
   search$ = new BehaviorSubject("");
   errorTrigger$ = new Subject<void>();
-  suspenseTrigger$ = new Subject<void>();
 
   get searchValue(): string {
     return this.search$.getValue();
@@ -167,49 +165,44 @@ export class PokedexPageComponent {
     this.search$.next(value);
   }
 
-  async ngOnInit() {
-    this.pokemon$ = this.action.retry$.pipe(
-      tap(() => {
-        this.suspenseTrigger$.next();
-      }),
-      startWith(null),
-      switchMap(() =>
-        combineLatest([
-          this.search$,
-          this.pokemonService.getPokemon().pipe(
-            catchError((error) => {
-              console.log(error);
-              return of(null);
-            })
-          ),
-        ])
-      ),
-      map(([searchValue, pokemon]) => {
-        return pokemon?.filter(
-          (p) =>
-            p.name.includes(searchValue.toLowerCase()) ||
-            p.id.toString().includes(searchValue)
-        );
-      }),
-      tap((r) => {
-        if (!r) {
-          this.errorTrigger$.next();
-        }
-      })
-    );
-  }
+  pokemon$ = this.action.retry$.pipe(
+    startWith(null),
+    switchMap(() =>
+      combineLatest([
+        this.search$,
+        this.pokemonService.getPokemon().pipe(
+          catchError((error) => {
+            console.log(error);
+            return of(null);
+          })
+        ),
+      ])
+    ),
+    map(([searchValue, pokemon]) => {
+      return pokemon?.filter(
+        (p) =>
+          p.name.includes(searchValue.toLowerCase()) ||
+          p.id.toString().includes(searchValue)
+      );
+    }),
+    tap((r) => {
+      if (!r) {
+        this.errorTrigger$.next();
+      }
+    })
+  );
 
   onCollectionViewLoad(args: LoadEventData) {
     this.collectionView = args.object as CollectionView;
   }
 
   setDisplayMode(value) {
-    this.zone.runOutsideAngular(() => {
-      this.displayMode.set(value);
-      if (isIOS && this.collectionView) {
+    this.displayMode.set(value);
+    if (isIOS && this.collectionView) {
+      this.zone.runOutsideAngular(() => {
         this.collectionView.requestLayout();
-      }
-    });
+      });
+    }
   }
 
   navigateTo(index: number) {
