@@ -1,0 +1,73 @@
+<GridLayout rows="auto *">
+  <StackLayout row="0" class="p-2 text-primary dark:text-white">
+    <FlexboxLayout class="mb-1" justifyContent="space-between">
+      <label hlmH1 class="text-lg">NativeScript Pokedex</label>
+      <StackLayout orientation="horizontal">
+        <button
+          text="&#xf0c9;"
+          hlmBtn
+          variant="outline"
+          (tap)="setDisplayMode('fill')"
+          class="fa m-0 mr-1 p-0 w-10 h-10"
+        ></button>
+        <button
+          text="&#xf009;"
+          hlmBtn
+          variant="outline"
+          (tap)="setDisplayMode('grid')"
+          class="fa m-0 p-0 w-10 h-10"
+        ></button>
+      </StackLayout>
+    </FlexboxLayout>
+    <TextField
+      (textChange)="searchValue = $event.value"
+      class="border-border border rounded-md p-2 text-primary dark:text-white"
+      hint="Search Pokemon"
+    ></TextField>
+  </StackLayout>
+  <ng-container
+    *rxLet="
+      pokemon$;
+      let pokemon;
+      suspense: suspense;
+      suspenseTrigger: action.retry$;
+      error: error;
+      errorTrigger: errorTrigger$
+    "
+  >
+    <CollectionView
+      row="1"
+      rowHeight="120"
+      [items]="pokemon"
+      (loaded)="onCollectionViewLoad($event)"
+      [colWidth]="displayMode() === 'fill' ? '100%' : '50%'"
+    >
+      <ng-template let-pokemon="item">
+        <pokemon-card [pokemon]="pokemon" (tap)="navigateTo(pokemon.id)" />
+      </ng-template>
+    </CollectionView>
+  </ng-container>
+</GridLayout>
+
+<ng-template #suspense>
+  <GridLayout row="1" rows="*" columns="*">
+    <ImageCacheIt
+      src="https://cdn-icons-png.flaticon.com/256/744/744104.png"
+      height="60"
+      width="60"
+    ></ImageCacheIt>
+    <ActivityIndicator
+      class="text-primary"
+      height="100"
+      width="100"
+      busy="true"
+    />
+  </GridLayout>
+</ng-template>
+
+<ng-template #error>
+  <StackLayout class="p-4" row="1">
+    <label>Something went wrong</label>
+    <button hlmBtn (tap)="action.retry()">Retry</button>
+  </StackLayout>
+</ng-template>

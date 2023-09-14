@@ -26,7 +26,6 @@ import { RxLet } from "@rx-angular/template/let";
 import { ImageCacheItModule } from "@triniwiz/nativescript-image-cache-it/angular";
 import {
   BehaviorSubject,
-  Observable,
   Subject,
   catchError,
   combineLatest,
@@ -35,9 +34,7 @@ import {
   startWith,
   switchMap,
   tap,
-  throwError,
 } from "rxjs";
-import { Pokemon } from "../../services/gql/get-pokemon.gql";
 import { PokemonService } from "../../services/pokemon.service";
 import { HlmButtonDirective } from "../../ui/button/hlm-button.directive";
 import { BrnSeparatorComponent } from "../../ui/separator/brn-separator.component";
@@ -51,83 +48,7 @@ interface Actions {
 }
 
 @Component({
-  template: `
-    <GridLayout rows="auto *">
-      <StackLayout row="0" class="p-2 text-primary dark:text-white">
-        <FlexboxLayout class="mb-1" justifyContent="space-between">
-          <Label hlmH1 class="text-lg">NativeScript Pokedex</Label>
-          <StackLayout orientation="horizontal">
-            <Button
-              text="&#xf0c9;"
-              hlmBtn
-              variant="outline"
-              style="android-elevation: -4;"
-              (tap)="setDisplayMode('fill')"
-              class="fa m-0 mr-1 p-0 w-10 h-10"
-            ></Button>
-            <Button
-              text="&#xf009;"
-              hlmBtn
-              variant="outline"
-              style="android-elevation: -4;"
-              (tap)="setDisplayMode('grid')"
-              class="fa m-0 p-0 w-10 h-10"
-            ></Button>
-          </StackLayout>
-        </FlexboxLayout>
-        <TextField
-          (textChange)="searchValue = $event.value"
-          class="border-border border rounded-md p-2 text-primary dark:text-white"
-          hint="Search Pokemon"
-        ></TextField>
-      </StackLayout>
-      <ng-container
-        *rxLet="
-          pokemon$;
-          let pokemon;
-          suspense: suspense;
-          suspenseTrigger: action.retry$;
-          error: error;
-          errorTrigger: errorTrigger$
-        "
-      >
-        <CollectionView
-          row="1"
-          rowHeight="120"
-          [items]="pokemon"
-          (loaded)="onCollectionViewLoad($event)"
-          [colWidth]="displayMode() === 'fill' ? '100%' : '50%'"
-        >
-          <ng-template let-pokemon="item">
-            <pokemon-card [pokemon]="pokemon" (tap)="navigateTo(pokemon.id)" />
-          </ng-template>
-        </CollectionView>
-      </ng-container>
-    </GridLayout>
-
-    <ng-template #suspense>
-      <GridLayout row="1" rows="*" columns="*">
-        <ImageCacheIt
-          src="https://cdn-icons-png.flaticon.com/256/744/744104.png"
-          height="60"
-          width="60"
-        ></ImageCacheIt>
-        <ActivityIndicator
-          class="text-primary"
-          height="100"
-          width="100"
-          busy="true"
-        />
-      </GridLayout>
-    </ng-template>
-
-    <ng-template #error>
-      <StackLayout class="p-4" row="1">
-        <Label>Something went wrong</Label>
-        <Button hlmBtn (tap)="action.retry()">Retry</Button>
-      </StackLayout>
-    </ng-template>
-  `,
+  templateUrl: "./pokedex.page.html",
   standalone: true,
   imports: [
     NativeScriptCommonModule,
@@ -172,7 +93,8 @@ export class PokedexPageComponent {
         this.search$,
         this.pokemonService.getPokemon().pipe(
           catchError((error) => {
-            console.log(error);
+            console.log('error', error);
+            this.errorTrigger$.next();
             return of(null);
           })
         ),
@@ -185,11 +107,6 @@ export class PokedexPageComponent {
           p.id.toString().includes(searchValue)
       );
     }),
-    tap((r) => {
-      if (!r) {
-        this.errorTrigger$.next();
-      }
-    })
   );
 
   onCollectionViewLoad(args: LoadEventData) {
