@@ -40,7 +40,7 @@
       rowHeight="120"
       [items]="pokemon"
       (loaded)="onCollectionViewLoad($event)"
-      [colWidth]="displayMode() === 'fill' ? '100%' : '50%'"
+      [colWidth]="displayWidth()"
     >
       <ng-template let-pokemon="item">
         <pokemon-card [pokemon]="pokemon" (tap)="navigateTo(pokemon.id)" />

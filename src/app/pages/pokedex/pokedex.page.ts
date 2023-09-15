@@ -3,6 +3,7 @@ import {
   Component,
   NO_ERRORS_SCHEMA,
   NgZone,
+  computed,
   inject,
   signal,
 } from "@angular/core";
@@ -76,8 +77,9 @@ export class PokedexPageComponent {
   action = this.factory.create();
 
   displayMode = signal("fill");
-  search$ = new BehaviorSubject("");
-  errorTrigger$ = new Subject<void>();
+  displayWidth = computed(() => {
+    return this.displayMode() === 'fill' ? '100%' : '50%';
+  });
 
   get searchValue(): string {
     return this.search$.getValue();
@@ -86,6 +88,8 @@ export class PokedexPageComponent {
     this.search$.next(value);
   }
 
+  search$ = new BehaviorSubject("");
+  errorTrigger$ = new Subject<void>();
   pokemon$ = this.action.retry$.pipe(
     startWith(null),
     switchMap(() =>
@@ -130,7 +134,6 @@ export class PokedexPageComponent {
       },
       pageEnd: {
         duration: 250,
-        spring: { tension: 60, friction: 8, mass: 4 },
       },
       pageReturn: {
         duration: 150,
