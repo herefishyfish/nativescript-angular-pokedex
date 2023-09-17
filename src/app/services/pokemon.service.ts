@@ -2,11 +2,12 @@ import { Injectable, inject } from "@angular/core";
 import { Apollo } from "apollo-angular";
 import { GET_POKEMON } from "./gql/get-pokemon.gql";
 import { GET_POKEMON_DETAILS } from "./gql/get-pokemon-details.gql";
-import { map, shareReplay, tap } from "rxjs";
+import { map, shareReplay, take, tap } from "rxjs";
 
 @Injectable()
 export class PokemonService {
   private apollo = inject(Apollo);
+  activeDetail;
 
   getPokemonSprite(index: number): string {
     return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${index}.png`;
@@ -36,6 +37,12 @@ export class PokemonService {
           }))
         )
       );
+  }
+
+  getDetail(id: number) {
+    return this
+      .getPokemonDetails(id)
+      .pipe(take(1));
   }
 
   getPokemonDetails(id: number) {

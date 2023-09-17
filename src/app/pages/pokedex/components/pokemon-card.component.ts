@@ -1,26 +1,29 @@
-import { Component, Input, NO_ERRORS_SCHEMA } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input, NO_ERRORS_SCHEMA } from "@angular/core";
 import {
   NativeScriptCommonModule,
   registerElement,
 } from "@nativescript/angular";
-import { CSSType, GridLayout } from "@nativescript/core";
+import { GridLayout } from "@nativescript/core";
 import { ImageCacheItModule } from "@triniwiz/nativescript-image-cache-it/angular";
 import { HlmH3Directive } from "../../../ui/typography/hlm-h3.directive";
 import { Pokemon } from "../../../services/pokemon.models";
 import { HlmCardDirective } from "~/app/ui/card/hlm-card.directive";
 
-registerElement("pokemon-card", () => PokemonPageCardComponent);
+registerElement("pokemon-card", () => GridLayout);
 
-@CSSType("pokemon-card")
 @Component({
   selector: "pokemon-card",
   template: `
     <ContentView row="1" rowSpan="2" colSpan="2" hlmCard class="p-2 px-4">
     </ContentView>
     <ImageCacheIt
-      class="image p-1 mx-4"
+      class="image mx-4"
+      stretch="aspectFit"
       [sharedTransitionTag]="'poke-image-' + pokemon.id"
       [src]="pokemon?.image"
+      [width]="displayMode === 'fill' ? 90 : 50"
+      [translateX]="displayMode === 'fill' ? 0 : 15"
+      [translateY]="displayMode === 'fill' ? 0 : -5"
     ></ImageCacheIt>
     <StackLayout
       class="p-2 px-4"
@@ -35,16 +38,10 @@ registerElement("pokemon-card", () => PokemonPageCardComponent);
   `,
   styles: [
     `
-      :host {
-        rows: 30 30 40;
-        columns: * auto;
-        padding: 8;
-      }
       .image {
         column: 1;
         row-span: 3;
         z-index: 3;
-        width: 90;
       }
     `,
   ],
@@ -56,7 +53,14 @@ registerElement("pokemon-card", () => PokemonPageCardComponent);
     HlmCardDirective,
   ],
   schemas: [NO_ERRORS_SCHEMA],
+  host: {
+    rows: '30,30,40',
+    columns: '*,auto',
+    padding: '8'
+  },
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PokemonPageCardComponent extends GridLayout {
+export class PokemonPageCardComponent {
   @Input() pokemon: Pokemon;
+  @Input() displayMode;
 }

@@ -3,11 +3,13 @@ import {
   Component,
   NO_ERRORS_SCHEMA,
   NgZone,
-  computed,
   inject,
   signal,
 } from "@angular/core";
-import { CollectionView } from "@nativescript-community/ui-collectionview";
+import {
+  CollectionView,
+  CollectionViewItemEventData,
+} from "@nativescript-community/ui-collectionview";
 import { CollectionViewModule } from "@nativescript-community/ui-collectionview/angular";
 import {
   NativeScriptCommonModule,
@@ -16,10 +18,12 @@ import {
 } from "@nativescript/angular";
 import {
   LoadEventData,
+  ObservableArray,
   PageTransition,
   Screen,
   SharedTransition,
   SharedTransitionConfig,
+  SharedTransitionTagProperties,
   isIOS,
 } from "@nativescript/core";
 import { RxActionFactory } from "@rx-angular/state/actions";
@@ -34,9 +38,11 @@ import {
   of,
   startWith,
   switchMap,
+  take,
   tap,
 } from "rxjs";
 import { PokemonService } from "../../services/pokemon.service";
+import { Pokemon } from "../../services/pokemon.models";
 import { HlmButtonDirective } from "../../ui/button/hlm-button.directive";
 import { BrnSeparatorComponent } from "../../ui/separator/brn-separator.component";
 import { HlmSeparatorDirective } from "../../ui/separator/hlm-separator.directive";
@@ -76,10 +82,11 @@ export class PokedexPageComponent {
   private factory = inject(RxActionFactory<Actions>);
   action = this.factory.create();
 
+  pokemons = new ObservableArray<Pokemon>([]);
   displayMode = signal("fill");
-  displayWidth = computed(() => {
-    return this.displayMode() === 'fill' ? '100%' : '50%';
-  });
+  search$ = new BehaviorSubject("");
+  errorTrigger$ = new Subject<void>();
+  loading = false;
 
   get searchValue(): string {
     return this.search$.getValue();
@@ -88,8 +95,6 @@ export class PokedexPageComponent {
     this.search$.next(value);
   }
 
-  search$ = new BehaviorSubject("");
-  errorTrigger$ = new Subject<void>();
   pokemon$ = this.action.retry$.pipe(
     startWith(null),
     switchMap(() =>
@@ -97,7 +102,7 @@ export class PokedexPageComponent {
         this.search$,
         this.pokemonService.getPokemon().pipe(
           catchError((error) => {
-            console.log('error', error);
+            console.log("error", error);
             this.errorTrigger$.next();
             return of(null);
           })
@@ -105,13 +110,23 @@ export class PokedexPageComponent {
       ])
     ),
     map(([searchValue, pokemon]) => {
-      return pokemon?.filter(
-        (p) =>
-          p.name.includes(searchValue.toLowerCase()) ||
-          p.id.toString().includes(searchValue)
-      );
-    }),
+      return pokemon?.filter((p) => {
+        if (searchValue) {
+          return (
+            p.name.includes(searchValue.toLowerCase()) ||
+            p.id.toString().includes(searchValue)
+          );
+        }
+        return true;
+      });
+    })
   );
+
+  ngOnInit() {
+    this.pokemon$.subscribe((pokemons) => {
+      this.pokemons.splice(0, this.pokemons.length, ...pokemons);
+    });
+  }
 
   onCollectionViewLoad(args: LoadEventData) {
     this.collectionView = args.object as CollectionView;
@@ -126,24 +141,35 @@ export class PokedexPageComponent {
     }
   }
 
-  navigateTo(index: number) {
+  navigateTo(args: CollectionViewItemEventData) {
+    const pokemon = this.pokemons.getItem(args.index);
     const config: SharedTransitionConfig = {
-      pageStart: {
-        x: -Screen.mainScreen.widthDIPs,
-        y: 0,
+      interactive: {
+        dismiss: {
+          finishThreshold: .5
+        }
       },
       pageEnd: {
-        duration: 250,
+        duration: 300,
       },
       pageReturn: {
         duration: 150,
       },
     };
 
-    this.zone.run(() => {
-      this.router.navigate([`pokemon/${index}`], {
-        transition: SharedTransition.custom(new PageTransition(), config),
+    // prime the load before animating transition
+    this.loading = true;
+    this.pokemonService
+      .getDetail(pokemon.id)
+      .subscribe((pokemonDetails) => {
+        this.pokemonService.activeDetail = pokemonDetails;
+        this.loading = false;
+        setTimeout(() => {
+          // we navigate on next tick to ensure snapshotting doesn't snap the loader graphic
+          this.router.navigate([`pokemon/${pokemon.id}`], {
+            transition: SharedTransition.custom(new PageTransition(), config),
+          });
+        })
       });
-    });
   }
 }
