@@ -1,33 +1,48 @@
 <GridLayout
   rows="auto auto auto *"
-  columns="70* 30*"
+  columns="auto 70* 30*"
   class="pb-2"
-  *rxLet="pokemon$; let pokemon; suspense: suspense; error: error"
 >
-  <StackLayout colSpan="2" class="pb-1 pt-2 px-4" orientation="horizontal">
+  <button
+    text="&#xf053;"
+    hlmBtn
+    variant="outline"
+    (tap)="back()"
+    class="fa m-0 mr-2 p-0 w-10 h-10"
+  ></button>
+  <StackLayout
+    col="1"
+    colSpan="2"
+    class="pb-1 pt-2"
+    orientation="horizontal"
+    (tap)="back()"
+  >
     <label hlmH1 class="text-primary mr-1"
       >{{ pokemon?.name | titlecase }}</label
     >
     <label hlmH2 class="text-muted-foreground">#{{ pokemon?.id }}</label>
   </StackLayout>
 
-  <StackLayout row="1" colSpan="2" class="pb-1 px-4" orientation="horizontal">
-    <ng-container *ngFor="let type of pokemon.types">
+  <StackLayout row="1" colSpan="3" class="pb-1 px-4" orientation="horizontal">
+    <ng-container *ngFor="let type of pokemon?.types">
       <label class="mr-1" hlmBadge [type]="type">{{ type | titlecase }}</label>
     </ng-container>
   </StackLayout>
 
   <ImageCacheIt
-    [sharedTransitionTag]="'poke-image-' + id"
-    [src]="pokemon.image"
+    [sharedTransitionTag]="'poke-image-' + pokemon?.id"
+    [src]="pokemon?.image"
+    stretch="aspectFit"
     row="2"
+    colSpan="2"
     class="m-2"
+    width="170"
   ></ImageCacheIt>
 
   <StackLayout
     *rxLet="currentIndex$ as index"
     row="2"
-    col="1"
+    col="2"
     class="mr-2 my-2"
     orientation="vertical"
     hlmTabsList
@@ -38,7 +53,9 @@
       let tab of ['Stats', 'Details', 'Abilities', 'Moves', 'Evolutions'];
       let i = index
     "
-      width="120"
+      width="135"
+      height="35"
+      class="text-xs"
       color="{{ index | colorTransition : i : '#fff' : 'grey' }}"
       backgroundColor="{{ index | colorTransition : i : 'black' : '#fff' }}"
       (tap)="onSelectedIndexChanged(i)"
@@ -47,7 +64,7 @@
     </button>
   </StackLayout>
 
-  <Pager peaking="8" row="3" colSpan="2" (loaded)="onPagerLoaded($event)">
+  <Pager peaking="8" row="3" colSpan="3" (loaded)="onPagerLoaded($event)">
     <pokemon-stats
       hlmCard
       class="p-4 mx-2 my-1"
@@ -83,30 +100,3 @@
     </StackLayout>
   </Pager>
 </GridLayout>
-
-<ng-template #suspense>
-  <GridLayout rows="*" columns="*">
-    <ImageCacheIt
-      src="https://cdn-icons-png.flaticon.com/256/744/744104.png"
-      height="60"
-      width="60"
-    ></ImageCacheIt>
-    <ActivityIndicator
-      class="text-primary"
-      height="100"
-      width="100"
-      busy="true"
-    />
-  </GridLayout>
-</ng-template>
-<ng-template #error>
-  <GridLayout rows="* auto *" columns="*">
-    <label hlmH3 row="1" class="text-center">Could not get pokemon! 🫤</label>
-    <ImageCacheIt
-      src="https://static.thenounproject.com/png/561604-200.png"
-      height="280"
-      width="280"
-    ></ImageCacheIt>
-    <label class="text-center mt-8 pt-8 text-7xl text-primary" hlmH1>???</label>
-  </GridLayout>
-</ng-template>
