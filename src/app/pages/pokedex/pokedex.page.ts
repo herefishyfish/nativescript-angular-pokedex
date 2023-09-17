@@ -144,11 +144,6 @@ export class PokedexPageComponent {
   navigateTo(args: CollectionViewItemEventData) {
     const pokemon = this.pokemons.getItem(args.index);
     const config: SharedTransitionConfig = {
-      interactive: {
-        dismiss: {
-          finishThreshold: .5
-        }
-      },
       pageEnd: {
         duration: 300,
       },
