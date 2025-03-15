@@ -19,7 +19,6 @@ export class AppComponent {
 
 
   onReady(args) {
-    console.log('onReady', args);
     this.canvas = args.object as Canvas;
     run(this.canvas);
   }
