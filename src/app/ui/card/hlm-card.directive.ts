@@ -4,7 +4,7 @@ import { hlm } from '@spartan-ng/ui-core';
 import { ClassValue } from 'clsx';
 
 const cardVariants = cva(
-  'rounded-lg border border-border bg-card focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-card-foreground shadow-sm',
+  'rounded-lg border border-border focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-card-foreground shadow-sm',
   {
     variants: {},
     defaultVariants: {},
@@ -15,6 +15,9 @@ export type CardVariants = VariantProps<typeof cardVariants>;
 @Directive({
   selector: '[hlmCard]',
   standalone: true,
+  host: {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  }
 })
 export class HlmCardDirective {
   private _inputs: ClassValue = '';

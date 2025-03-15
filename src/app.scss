@@ -86,12 +86,12 @@ TextView {
 }
 
 Frame {
-  // @apply dark:bg-primary bg-background text-primary;
+  @apply bg-background text-primary;
   background-color: transparent;
 }
 
 Page {
-  // @apply dark:bg-primary bg-background text-primary;
+  @apply bg-background text-primary;
   background-color: transparent;
 }
 
@@ -103,7 +103,7 @@ Page {
 [hlmCard] {
   &.ns-android {
     margin: 1;
-    android-elevation: 1;
+    android-elevation: -1;
     box-shadow: none;
   }
 

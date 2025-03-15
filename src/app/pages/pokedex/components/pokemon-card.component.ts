@@ -14,7 +14,7 @@ registerElement("pokemon-card", () => GridLayout);
 @Component({
   selector: "pokemon-card",
   template: `
-    <ContentView row="1" rowSpan="2" colSpan="2" class="p-2 px-4" backgroundColor="rgba(0,0,0,0.4)">
+    <ContentView row="1" rowSpan="2" colSpan="2" class="p-2 px-4" hlmCard>
     </ContentView>
     <ImageCacheIt
       class="image mx-4"
