@@ -86,11 +86,13 @@ TextView {
 }
 
 Frame {
-  @apply dark:bg-primary bg-background text-primary;
+  // @apply dark:bg-primary bg-background text-primary;
+  background-color: transparent;
 }
 
 Page {
-  @apply dark:bg-primary bg-background text-primary;
+  // @apply dark:bg-primary bg-background text-primary;
+  background-color: transparent;
 }
 
 .fa {

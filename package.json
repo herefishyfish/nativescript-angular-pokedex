@@ -15,10 +15,16 @@
     "@angular/platform-browser-dynamic": "~16.2.0",
     "@angular/router": "~16.2.0",
     "@apollo/client": "^3.8.3",
-    "@nativescript-community/ui-collectionview": "^5.2.0",
-    "@nativescript-community/ui-pager": "^14.1.6",
+    "@nativescript/canvas": "2.0.0-rc.10",
+    "@nativescript/canvas-media": "2.0.0-rc.10",
+    "@nativescript/canvas-pixi": "2.0.0-rc.10",
+    "@nativescript/canvas-polyfill": "2.0.0-rc.10",
+    "@nativescript/canvas-svg": "2.0.0-rc.10",
+    "@nativescript/canvas-three": "2.0.0-rc.10",
+    "@nativescript-community/ui-collectionview": "5.2.0",
+    "@nativescript-community/ui-pager": "14.1.6",
     "@nativescript/angular": "^16.0.0",
-    "@nativescript/core": "~8.5.0",
+    "@nativescript/core": "next",
     "@nativescript/theme": "~3.0.2",
     "@rx-angular/cdk": "^16.0.0",
     "@rx-angular/state": "^16.0.0",
@@ -37,7 +43,7 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "~16.2.0",
     "@angular/compiler-cli": "~16.2.0",
-    "@nativescript/android": "8.5.2",
+    "@nativescript/android": "next",
     "@nativescript/ios": "8.5.2",
     "@nativescript/preview-cli": "^1.0.5",
     "@nativescript/stackblitz": "0.0.8",
@@ -48,6 +54,7 @@
     "tailwind-merge": "^1.14.0",
     "tailwindcss": "~3.2.0",
     "tailwindcss-animate": "^1.0.7",
-    "typescript": "~5.1.6"
+    "typescript": "~5.1.6",
+    "wgpu-matrix": "^3.0.1"
   }
 }

@@ -2,12 +2,24 @@ import {
   platformNativeScript,
   runNativeScriptAngularApp,
 } from "@nativescript/angular";
+import { GPU } from "@nativescript/canvas";
+globalThis.navigator ??= {
+  // @ts-expect-error
+  gpu: new GPU(),
+};
+
+declare const jp: any;
+
+if (global.isAndroid) {
+  jp.wasabeef.takt.Takt.stock(Utils.android.getApplicationContext()).seat(jp.wasabeef.takt.Seat.TOP_CENTER).color(-65536);
+}
 
 import { AppModule } from "./app/app.module";
 import {
   CoreTypes,
   SharedTransition,
   TouchManager,
+  Utils,
   View,
   ViewBase,
   querySelectorAll,
